@@ -197,8 +197,12 @@ function triggerLoginSuccess(successMsg) {
     overlay.classList.remove('active');
     
     // Store operator details in sessionStorage so dashboard.html can read it
-    sessionStorage.setItem('operatorName', selectedOperator.name);
-    sessionStorage.setItem('operatorAvatar', selectedOperator.avatar);
+    try {
+      sessionStorage.setItem('operatorName', selectedOperator.name);
+      sessionStorage.setItem('operatorAvatar', selectedOperator.avatar);
+    } catch (e) {
+      console.warn("sessionStorage is unavailable or blocked:", e);
+    }
     
     clearPin();
     

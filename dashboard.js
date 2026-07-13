@@ -1,10 +1,19 @@
 // --- Coffee Shop POS Dashboard Operations (dashboard.js) ---
 
-// Operator State (loaded from sessionStorage)
+// Operator State (loaded from sessionStorage safely)
 let selectedOperator = {
-  name: sessionStorage.getItem('operatorName') || 'Sarah Jenkins',
-  avatar: sessionStorage.getItem('operatorAvatar') || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100'
+  name: 'Sarah Jenkins',
+  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100'
 };
+
+try {
+  const storedName = sessionStorage.getItem('operatorName');
+  const storedAvatar = sessionStorage.getItem('operatorAvatar');
+  if (storedName) selectedOperator.name = storedName;
+  if (storedAvatar) selectedOperator.avatar = storedAvatar;
+} catch (e) {
+  console.warn("sessionStorage is unavailable or blocked:", e);
+}
 
 // Products Catalog Data
 const products = [
@@ -386,8 +395,12 @@ function logoutSession() {
   if (dashClockInterval) clearInterval(dashClockInterval);
   
   // Clear sessionStorage operator details
-  sessionStorage.removeItem('operatorName');
-  sessionStorage.removeItem('operatorAvatar');
+  try {
+    sessionStorage.removeItem('operatorName');
+    sessionStorage.removeItem('operatorAvatar');
+  } catch (e) {
+    console.warn("sessionStorage is unavailable or blocked:", e);
+  }
   
   // Redirect back to login screen
   window.location.href = 'index.html';
