@@ -192,10 +192,17 @@ function triggerLoginSuccess(successMsg) {
     }, step.delay);
   });
   
-  // Simulator redirect
+  // Redirect to dashboard page
   setTimeout(() => {
     overlay.classList.remove('active');
-    alert(`Success! Logging in to BrewOS System. \nOperator: ${selectedOperator.name}\nRole: ${selectedOperator.role}`);
+    
+    // Store operator details in sessionStorage so dashboard.html can read it
+    sessionStorage.setItem('operatorName', selectedOperator.name);
+    sessionStorage.setItem('operatorAvatar', selectedOperator.avatar);
+    
     clearPin();
+    
+    // Redirect
+    window.location.href = 'dashboard.html';
   }, 3500);
 }
