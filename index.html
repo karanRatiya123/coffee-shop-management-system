@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrewOS POS - Coffee Shop Management Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="pos-container">
+    <!-- Left Hero Panel (Visuals, Branding, Stats) -->
+    <div class="hero-panel">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="brand-header">
+          <div class="logo-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+              <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+              <line x1="6" y1="2" x2="6" y2="4" />
+              <line x1="10" y1="2" x2="10" y2="4" />
+              <line x1="14" y1="2" x2="14" y2="4" />
+            </svg>
+          </div>
+          <span class="brand-name">BrewOS</span>
+          <span class="brand-badge">POS v4.2</span>
+        </div>
+
+        <div class="hero-footer">
+          <div class="testimonial-card">
+            <div class="quote-text">"Espresso is a miracle of chemistry in a cup."</div>
+            <div class="quote-author">Station 01 — Main Bar</div>
+          </div>
+          
+          <div class="system-status">
+            <div class="status-indicator">
+              <span class="pulse-dot"></span>
+              <span class="status-text">Register Online</span>
+            </div>
+            <div class="time-widget" id="time-display">00:00:00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Login Form Panel -->
+    <div class="login-panel">
+      <!-- Top Right Utilities -->
+      <div class="panel-header-utilities">
+        <div class="terminal-badge">
+          <svg class="terminal-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <span>TERM-09A</span>
+        </div>
+      </div>
+
+      <!-- Main Interaction Card Container -->
+      <div class="auth-card-wrapper">
+        <div class="auth-card-header">
+          <h1 class="auth-title">Welcome Back</h1>
+          <p class="auth-subtitle">Enter your operator PIN to start your shift</p>
+        </div>
+
+        <!-- Dynamic Content Viewport -->
+        <div class="auth-viewport">
+          
+          <!-- PIN LOGIN VIEW (BARISTA / QUICK SIGN-IN) -->
+          <div class="auth-view active" id="view-pin">
+            <!-- Selected Employee Selector -->
+            <div class="employee-selector-container">
+              <label class="input-label">Select Active Operator</label>
+              <div class="custom-dropdown" id="operator-dropdown">
+                <div class="dropdown-selected" onclick="toggleDropdown()">
+                  <div class="operator-profile">
+                    <div class="operator-avatar" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100')"></div>
+                    <div class="operator-info">
+                      <span class="operator-name">Sarah Jenkins</span>
+                      <span class="operator-role">Senior Barista</span>
+                    </div>
+                  </div>
+                  <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="dropdown-list" id="operator-list">
+                  <div class="dropdown-item active" onclick="selectOperator('Sarah Jenkins', 'Senior Barista', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100')">
+                    <div class="operator-avatar" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100')"></div>
+                    <div class="operator-info">
+                      <span class="operator-name">Sarah Jenkins</span>
+                      <span class="operator-role">Senior Barista</span>
+                    </div>
+                  </div>
+                  <div class="dropdown-item" onclick="selectOperator('Marcus Thorne', 'Shift Supervisor', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100')">
+                    <div class="operator-avatar" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100')"></div>
+                    <div class="operator-info">
+                      <span class="operator-name">Marcus Thorne</span>
+                      <span class="operator-role">Shift Supervisor</span>
+                    </div>
+                  </div>
+                  <div class="dropdown-item" onclick="selectOperator('Elena Rostova', 'Barista', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100')">
+                    <div class="operator-avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100')"></div>
+                    <div class="operator-info">
+                      <span class="operator-name">Elena Rostova</span>
+                      <span class="operator-role">Barista</span>
+                    </div>
+                  </div>
+                  <div class="dropdown-item" onclick="selectOperator('Devon Miller', 'Trainee', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100')">
+                    <div class="operator-avatar" style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100')"></div>
+                    <div class="operator-info">
+                      <span class="operator-name">Devon Miller</span>
+                      <span class="operator-role">Trainee</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PIN Display Dots -->
+            <div class="pin-display-wrapper">
+              <div class="pin-dots">
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+              </div>
+              <div class="pin-feedback-msg" id="pin-message">Enter 4-digit Passcode</div>
+            </div>
+
+            <!-- Tactile PIN Pad Grid -->
+            <div class="pin-pad">
+              <button class="pin-btn" onclick="pressPin('1')">1</button>
+              <button class="pin-btn" onclick="pressPin('2')">2</button>
+              <button class="pin-btn" onclick="pressPin('3')">3</button>
+              <button class="pin-btn" onclick="pressPin('4')">4</button>
+              <button class="pin-btn" onclick="pressPin('5')">5</button>
+              <button class="pin-btn" onclick="pressPin('6')">6</button>
+              <button class="pin-btn" onclick="pressPin('7')">7</button>
+              <button class="pin-btn" onclick="pressPin('8')">8</button>
+              <button class="pin-btn" onclick="pressPin('9')">9</button>
+              <button class="pin-btn utility" onclick="clearPin()">C</button>
+              <button class="pin-btn" onclick="pressPin('0')">0</button>
+              <button class="pin-btn utility backspace" onclick="backspacePin()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                  <line x1="18" y1="9" x2="12" y2="15"></line>
+                  <line x1="12" y1="9" x2="18" y2="15"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Footer details -->
+      <footer class="pos-footer">
+        <span>© 2026 BrewOS Systems Inc. All rights reserved.</span>
+        <div class="network-badge">
+          <span class="ping-indicator"></span>
+          <span>Cloud Sync Active</span>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Loading & Success Overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loader-content">
+      <div class="cup-loader">
+        <div class="coffee-cup">
+          <div class="handle"></div>
+          <div class="coffee-fill"></div>
+        </div>
+        <div class="cup-smoke">
+          <span class="smoke-line"></span>
+          <span class="smoke-line"></span>
+          <span class="smoke-line"></span>
+        </div>
+      </div>
+      <div class="loader-status" id="loader-status-text">Validating Security Tokens...</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
