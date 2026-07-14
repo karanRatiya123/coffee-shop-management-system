@@ -12,6 +12,20 @@
 <body>
   <!-- Dashboard Container -->
   <div class="dashboard-container active">
+    <!-- Background Circles Animation Overlay -->
+    <div class="bg-circles-wrapper variant-brewos-classic" id="bg-circles-container">
+      <div class="animated-grid"></div>
+      <div class="circles-group">
+        <div class="bg-circle circle-1"></div>
+        <div class="bg-circle circle-2"></div>
+        <div class="bg-circle circle-3"></div>
+      </div>
+      <div class="glow-spots">
+        <div class="glow-1"></div>
+        <div class="glow-2"></div>
+      </div>
+    </div>
+
     <!-- Sidebar Navigation -->
     <aside class="sidebar">
       <div class="sidebar-header">
@@ -119,6 +133,7 @@
       </button>
 
       <div class="topbar-right">
+
         <button class="notification-bell-btn">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -373,6 +388,7 @@
     </div>
   </div>
 
+  <script src="bg-circles.js"></script>
   <script src="dashboard.js"></script>
 </body>
 </html>

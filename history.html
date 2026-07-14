@@ -11,6 +11,27 @@
 </head>
 <body class="history-page">
   <div class="dashboard-container active history-page-shell">
+    <!-- Background Circles Animation Overlay -->
+    <div class="bg-circles-wrapper variant-brewos-classic" style="position: fixed;" id="bg-circles-container">
+      <div class="animated-grid"></div>
+      <div class="circles-group">
+        <div class="bg-circle circle-1"></div>
+        <div class="bg-circle circle-2"></div>
+        <div class="bg-circle circle-3"></div>
+      </div>
+      
+      <!-- Text & Details inside Circles -->
+      <div class="circles-text-container">
+        <h1 class="circles-text-title">BrewOS</h1>
+        <p class="circles-text-desc">POS Terminal Archive</p>
+      </div>
+
+      <div class="glow-spots">
+        <div class="glow-1"></div>
+        <div class="glow-2"></div>
+      </div>
+    </div>
+
     <aside class="sidebar">
       <div class="sidebar-header">
         <div class="logo-area">
@@ -200,6 +221,7 @@
     </main>
   </div>
 
+  <script src="bg-circles.js"></script>
   <script src="history.js"></script>
 </body>
 </html>

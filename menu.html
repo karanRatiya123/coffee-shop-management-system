@@ -11,7 +11,21 @@
 </head>
 <body class="customer-menu-body">
   <!-- App Shell: Sidebar + Menu Content -->
-  <div class="menu-app-shell">
+  <div class="menu-app-shell" style="position: relative;">
+    <!-- Background Circles Animation Overlay -->
+    <div class="bg-circles-wrapper variant-brewos-classic" style="position: fixed;" id="bg-circles-container">
+      <div class="animated-grid"></div>
+      <div class="circles-group">
+        <div class="bg-circle circle-1"></div>
+        <div class="bg-circle circle-2"></div>
+        <div class="bg-circle circle-3"></div>
+      </div>
+      <div class="glow-spots">
+        <div class="glow-1"></div>
+        <div class="glow-2"></div>
+      </div>
+    </div>
+
     <!-- Sidebar Navigation (kept, never removed) -->
     <aside class="sidebar">
       <div class="sidebar-header">
@@ -156,6 +170,7 @@
     </main>
   </div>
 
+  <script src="bg-circles.js"></script>
   <script src="menu.js"></script>
 </body>
 </html>
