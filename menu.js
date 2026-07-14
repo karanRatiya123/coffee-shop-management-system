@@ -189,191 +189,195 @@ const products = [
 
 // Search & Filter State
 let searchFilter = '';
-let currentDietFilter = 'All';
-let dashClockInterval = null;
+let currentCategoryFilter = 'All';
 
 // On Page Load
 document.addEventListener('DOMContentLoaded', () => {
-  // Sync cashier profile header details
-  updateDashboardOperator();
-  startDashboardClock();
-
-  // Render Catalog
+  // Render Category Tabs
+  renderCategoryTabs();
+  
+  // Render Stats & Catalog
   renderMenu();
 });
 
-// 1. Dashboard Operator Profile Sync
-function updateDashboardOperator() {
-  const dashNameEl = document.getElementById('dash-operator-name');
-  const dashAvatarEl = document.getElementById('dash-operator-avatar');
-  
-  if (dashNameEl) dashNameEl.textContent = selectedOperator.name;
-  if (dashAvatarEl) dashAvatarEl.style.backgroundImage = `url('${selectedOperator.avatar}')`;
+// Render Category Tabs Dynamically
+function renderCategoryTabs() {
+  const tabsContainer = document.getElementById('menu-category-tabs');
+  if (!tabsContainer) return;
+
+  const categories = ['All', 'Coffee', 'Cold Drinks', 'Tea', 'Snacks', 'Desserts'];
+  tabsContainer.innerHTML = categories.map(cat => `
+    <button class="view-menu-tab ${cat === currentCategoryFilter ? 'active' : ''}" onclick="selectCategory('${cat}', this)">
+      ${cat}
+    </button>
+  `).join('');
 }
 
-// 2. Real-Time clock for top bar
-function startDashboardClock() {
-  const timeEl = document.getElementById('dash-time-display');
-  if (!timeEl) return;
+function selectCategory(category, button) {
+  currentCategoryFilter = category;
   
-  if (dashClockInterval) clearInterval(dashClockInterval);
-  
-  function updateTime() {
-    const now = new Date();
-    const realMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const month = realMonths[now.getMonth()];
-    const date = now.getDate();
-    const year = now.getFullYear();
-    
-    let hours = now.getHours();
-    let minutes = now.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    
-    timeEl.textContent = `${month} ${date}, ${year} | ${hours}:${minutes} ${ampm}`;
-  }
-  
-  updateTime();
-  dashClockInterval = setInterval(updateTime, 1000);
+  // Update active state of tabs
+  const tabs = document.querySelectorAll('.view-menu-tab');
+  tabs.forEach(tab => tab.classList.remove('active'));
+  if (button) button.classList.add('active');
+
+  renderMenu();
 }
 
-// 3. Render Detailed Menu
+// Render stats and items
 function renderMenu() {
-  const layoutContainer = document.getElementById('menu-catalog-layout');
-  if (!layoutContainer) return;
-  
-  layoutContainer.innerHTML = '';
-  
-  // Filter products by Search and Dietary preferences
+  const gridContainer = document.getElementById('view-menu-grid');
+  const countEl = document.getElementById('menu-item-count');
+  const statsContainer = document.getElementById('menu-stats-row');
+
+  // Filter products
   const filteredProducts = products.filter(product => {
+    const matchesCategory = currentCategoryFilter === 'All' || product.category === currentCategoryFilter;
     const matchesSearch = product.name.toLowerCase().includes(searchFilter.toLowerCase()) || 
                           product.description.toLowerCase().includes(searchFilter.toLowerCase()) ||
                           product.category.toLowerCase().includes(searchFilter.toLowerCase());
-                          
-    const matchesDiet = currentDietFilter === 'All' || product.dietary.includes(currentDietFilter);
-    return matchesSearch && matchesDiet;
+    return matchesCategory && matchesSearch;
   });
 
-  // Group filtered products by Category
-  const categories = ['Coffee', 'Cold Drinks', 'Tea', 'Snacks', 'Desserts'];
-  
-  categories.forEach(category => {
-    const categoryItems = filteredProducts.filter(item => item.category === category);
+  // 1. Update count label
+  if (countEl) {
+    countEl.textContent = `${filteredProducts.length} Items`;
+  }
+
+  // 2. Render statistics row
+  if (statsContainer) {
+    const totalCount = products.length;
+    const uniqueCategories = [...new Set(products.map(p => p.category))].length;
+    const popularCount = products.filter(p => p.isPopular).length;
     
-    // Skip categories with no matching search results
-    if (categoryItems.length === 0) return;
-    
-    // Create Category Section
-    const section = document.createElement('div');
-    section.className = 'menu-catalog-section';
-    section.innerHTML = `
-      <h2 class="menu-section-title">${category}</h2>
-      <div class="menu-items-grid"></div>
+    // Calculate Price Range
+    const prices = products.map(p => p.price);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    const priceRange = `₹${minPrice.toFixed(0)} - ₹${maxPrice.toFixed(0)}`;
+
+    statsContainer.innerHTML = `
+      <div class="view-menu-stat-card">
+        <div class="view-menu-stat-icon total">
+          <i class="fa-solid fa-mug-hot"></i>
+        </div>
+        <div class="view-menu-stat-details">
+          <span class="view-menu-stat-value">${totalCount}</span>
+          <span class="view-menu-stat-label">Total Products</span>
+        </div>
+      </div>
+      <div class="view-menu-stat-card">
+        <div class="view-menu-stat-icon categories">
+          <i class="fa-solid fa-list"></i>
+        </div>
+        <div class="view-menu-stat-details">
+          <span class="view-menu-stat-value">${uniqueCategories}</span>
+          <span class="view-menu-stat-label">Categories</span>
+        </div>
+      </div>
+      <div class="view-menu-stat-card">
+        <div class="view-menu-stat-icon popular">
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <div class="view-menu-stat-details">
+          <span class="view-menu-stat-value">${popularCount}</span>
+          <span class="view-menu-stat-label">Bestsellers</span>
+        </div>
+      </div>
+      <div class="view-menu-stat-card">
+        <div class="view-menu-stat-icon pricerange">
+          <i class="fa-solid fa-indian-rupee-sign"></i>
+        </div>
+        <div class="view-menu-stat-details">
+          <span class="view-menu-stat-value">${priceRange}</span>
+          <span class="view-menu-stat-label">Price Range</span>
+        </div>
+      </div>
     `;
-    
-    const itemsGrid = section.querySelector('.menu-items-grid');
-    
-    categoryItems.forEach(item => {
-      // Stock Badge Styling
-      let stockStatusHtml = '';
-      if (item.stock > 10) {
-        stockStatusHtml = `<span class="stock-badge in-stock">In Stock (${item.stock})</span>`;
-      } else if (item.stock > 0) {
-        stockStatusHtml = `<span class="stock-badge low-stock">Low Stock (${item.stock})</span>`;
-      } else {
-        stockStatusHtml = `<span class="stock-badge out-of-stock">Out of Stock</span>`;
-      }
-      
-      // Dietary badges
-      const dietBadgesHtml = item.dietary.map(diet => `<span class="diet-label ${diet.toLowerCase()}">${diet}</span>`).join(' ');
-      
-      const card = document.createElement('div');
-      card.className = `menu-catalog-card ${item.stock === 0 ? 'inactive-card' : ''}`;
-      card.innerHTML = `
-        <div class="menu-card-left">
-          <div class="menu-card-img-wrapper">
-            <img src="${item.image}" alt="${item.name}" class="menu-card-img">
-            ${item.isPopular ? '<span class="popular-ribbon">Bestseller</span>' : ''}
-          </div>
-          <span class="menu-card-price">₹${item.price.toFixed(2)}</span>
-        </div>
-        
-        <div class="menu-card-right">
-          <div class="menu-card-header-row">
-            <h3 class="menu-card-name">${item.name}</h3>
-            ${stockStatusHtml}
-          </div>
-          
-          <p class="menu-card-desc">${item.description}</p>
-          
-          <div class="ingredients-list">
-            <strong>Ingredients:</strong> ${item.ingredients.join(', ')}
-          </div>
-          
-          <div class="nutrition-specs-row">
-            <div class="spec-capsule">Calories: <strong>${item.nutrition.kcal} kcal</strong></div>
-            <div class="spec-capsule">Caffeine: <strong>${item.nutrition.caffeine} mg</strong></div>
-            <div class="spec-capsule">Sugar: <strong>${item.nutrition.sugar} g</strong></div>
-          </div>
-          
-          <div class="menu-card-footer">
-            <div class="dietary-badges-row">${dietBadgesHtml}</div>
-            <a href="dashboard.html" class="add-to-order-link ${item.stock === 0 ? 'disabled' : ''}">
-              <span>Order Terminal</span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="order-arrow-icon">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </a>
-          </div>
-        </div>
-      `;
-      itemsGrid.appendChild(card);
-    });
-    
-    layoutContainer.appendChild(section);
-  });
-  
+  }
+
+  // 3. Render grid items
+  if (!gridContainer) return;
+  gridContainer.innerHTML = '';
+
   if (filteredProducts.length === 0) {
-    layoutContainer.innerHTML = `
-      <div class="no-menu-results">
+    gridContainer.innerHTML = `
+      <div class="view-menu-empty">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <p>No menu items matches your query. Try another search or filter.</p>
+        <h3>No menu items found</h3>
+        <p>No products match your search or selected category.</p>
       </div>
     `;
+    return;
   }
+
+  filteredProducts.forEach(item => {
+    // Stock status class and text
+    let stockClass = 'in-stock';
+    let stockText = `In Stock (${item.stock})`;
+    if (item.stock === 0) {
+      stockClass = 'out-of-stock';
+      stockText = 'Out of Stock';
+    } else if (item.stock <= 10) {
+      stockClass = 'low-stock';
+      stockText = `Low Stock (${item.stock})`;
+    }
+
+    // Dietary badges HTML
+    const dietBadgesHtml = item.dietary.map(diet => `
+      <span class="diet-label ${diet.toLowerCase()}">${diet}</span>
+    `).join(' ');
+
+    const card = document.createElement('div');
+    card.className = `view-menu-card ${item.stock === 0 ? 'inactive-card' : ''}`;
+    card.innerHTML = `
+      <div class="view-menu-card-img-wrapper">
+        <img src="${item.image}" alt="${item.name}" class="view-menu-card-img" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=300'">
+        <span class="view-menu-card-badge">${item.subtitle || item.category}</span>
+        ${item.isPopular ? '<span class="view-menu-card-popular">Popular</span>' : ''}
+      </div>
+      
+      <div class="view-menu-card-body">
+        <span class="view-menu-card-category">${item.category}</span>
+        <div class="view-menu-card-title-row">
+          <h3 class="view-menu-card-title">${item.name}</h3>
+          <span class="view-menu-card-price">₹${item.price.toFixed(2)}</span>
+        </div>
+        
+        <p class="view-menu-card-desc">${item.description}</p>
+        
+        <div class="view-menu-card-details">
+          <div class="view-menu-card-specs">
+            <span>Kcal: <strong>${item.nutrition.kcal}</strong></span>
+            <span>Caffeine: <strong>${item.nutrition.caffeine}mg</strong></span>
+            <span>Sugar: <strong>${item.nutrition.sugar}g</strong></span>
+          </div>
+          
+          <div class="view-menu-card-footer">
+            <div class="view-menu-card-dietary">${dietBadgesHtml}</div>
+            <span class="view-menu-card-stock ${stockClass}">${stockText}</span>
+          </div>
+        </div>
+      </div>
+    `;
+    gridContainer.appendChild(card);
+  });
 }
 
-// 4. Filter Dietary Preferences
-function filterDiet(dietType, button) {
-  currentDietFilter = dietType;
-  
-  // Toggle dietary buttons active state
-  const buttons = document.querySelectorAll('.dietary-tab');
-  buttons.forEach(btn => btn.classList.remove('active'));
-  button.classList.add('active');
-  
-  renderMenu();
-}
-
-// 5. Search Bar Filtering
+// Search Bar Filtering
 function filterMenuBySearch() {
-  const searchInput = document.getElementById('menu-search-input');
+  const searchInput = document.getElementById('view-menu-search');
   if (searchInput) {
     searchFilter = searchInput.value;
     renderMenu();
   }
 }
 
-// 6. Session Logout
+// Logout session
 function logoutSession() {
-  if (dashClockInterval) clearInterval(dashClockInterval);
-  // Clear sessionStorage operator details
   try {
     sessionStorage.removeItem('operatorName');
     sessionStorage.removeItem('operatorAvatar');

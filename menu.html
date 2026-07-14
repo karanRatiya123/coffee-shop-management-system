@@ -3,16 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BrewOS Cafe - Digital Menu Board</title>
+  <title>View Menu - Coffee Shop POS</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 </head>
-<body class="customer-menu-body">
-  <!-- App Shell: Sidebar + Menu Content -->
-  <div class="menu-app-shell" style="position: relative;">
-    <!-- Background Circles Animation Overlay -->
+<body class="view-menu-page">
+
+  <div class="dashboard-container active view-menu-layout">
+    
+    <!-- Background Circles Animation Overlay (Fixed in Viewport) -->
     <div class="bg-circles-wrapper variant-brewos-classic" style="position: fixed;" id="bg-circles-container">
       <div class="animated-grid"></div>
       <div class="circles-group">
@@ -26,8 +29,8 @@
       </div>
     </div>
 
-    <!-- Sidebar Navigation (kept, never removed) -->
-    <aside class="sidebar">
+    <!-- Sidebar Navigation (Kept consistent with dashboard/history) -->
+    <aside class="sidebar" style="position: relative; z-index: 10;">
       <div class="sidebar-header">
         <div class="logo-area">
           <div class="logo-icon-gold">
@@ -44,13 +47,6 @@
             <span class="brand-subtitle">POS SYSTEM</span>
           </div>
         </div>
-        <button class="sidebar-toggle-btn" aria-label="Toggle sidebar">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
       </div>
 
       <nav class="sidebar-menu">
@@ -68,7 +64,7 @@
         </a>
         <a href="menu.html" class="menu-item active">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-          <span>Menu Management</span>
+          <span>View Menu</span>
         </a>
         <a href="#" class="menu-item">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
@@ -103,70 +99,44 @@
       <div class="sidebar-footer">
         <div class="terminal-status-card">
           <div class="terminal-label">Terminal ID</div>
-          <div class="terminal-id-val">TERMINAL-01</div>
+          <div class="terminal-id-val">POS-042</div>
           <div class="terminal-online-status">
             <span class="pulse-dot-green"></span>
             <span>Online</span>
           </div>
         </div>
         <div class="sidebar-copyright">
-          © 2024 Coffee Shop Management System
+          © 2026 BrewOS Systems Inc.
         </div>
       </div>
     </aside>
 
-    <!-- Main Menu Content -->
-    <main class="menu-main-content">
-      <!-- Top Decorative Hero Banner -->
-      <div class="menu-hero-banner">
-        <div class="hero-overlay-dark"></div>
-        <div class="hero-text-content">
-          <div class="menu-logo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; color: var(--color-accent-caramel);">
-              <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
-              <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
-              <line x1="6" y1="2" x2="6" y2="4" />
-              <line x1="10" y1="2" x2="10" y2="4" />
-              <line x1="14" y1="2" x2="14" y2="4" />
-            </svg>
-            <span>BrewOS Cafe</span>
-          </div>
-          <h1>OUR CRAFTED MENU</h1>
-          <p>Freshly brewed daily with ethically sourced beans &amp; organic ingredients</p>
+    <!-- Topbar -->
+    <header class="topbar view-menu-topbar" style="justify-content: flex-end;">
+      <a href="dashboard.html" class="view-menu-back-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Dashboard
+      </a>
+    </header>
+
+    <!-- View Menu Content -->
+    <main class="view-menu-content">
+      <div class="view-menu-header">
+        <div>
+          <h1>Full Menu</h1>
+          <p>All coffee, drinks, snacks &amp; desserts — static menu catalog</p>
         </div>
+        <span class="view-menu-count" id="menu-item-count">Loading...</span>
       </div>
 
-      <!-- Centered Menu Wrapper -->
-      <div class="menu-board-wrapper">
-        <!-- Filters & Search Toolbar -->
-        <div class="menu-toolbar">
-          <div class="menu-search-box">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" placeholder="Search beverages or food..." id="menu-search-input" oninput="filterMenuBySearch()">
-          </div>
+      <div class="view-menu-stats-row" id="menu-stats-row"></div>
 
-          <div class="dietary-filters">
-            <button class="dietary-tab active" onclick="filterDiet('All', this)">All Items</button>
-            <button class="dietary-tab" onclick="filterDiet('Veg', this)">Vegetarian</button>
-            <button class="dietary-tab" onclick="filterDiet('Vegan', this)">Vegan</button>
-            <button class="dietary-tab" onclick="filterDiet('Dairy-Free', this)">Dairy Free</button>
-          </div>
-        </div>
+      <div class="category-tabs-container" id="menu-category-tabs"></div>
 
-        <!-- Category Grouped Display -->
-        <div class="menu-catalog-layout" id="menu-catalog-layout">
-          <!-- JavaScript renders items here -->
-        </div>
-      </div>
-
-      <!-- Footer Info -->
-      <footer class="menu-board-footer">
-        <p>Please inform our baristas of any dietary allergies before ordering.</p>
-        <span>© 2026 BrewOS Systems. All rights reserved.</span>
-      </footer>
+      <div class="view-menu-grid" id="view-menu-grid"></div>
     </main>
   </div>
 
