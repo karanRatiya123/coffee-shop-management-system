@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BrewOS Cafe - Digital Menu Board</title>
+  <title>Coffee Shop POS - Order History</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="customer-menu-body">
-  <!-- App Shell: Sidebar + Menu Content -->
-  <div class="menu-app-shell">
-    <!-- Sidebar Navigation (kept, never removed) -->
+<body class="history-page">
+  <div class="dashboard-container active history-page-shell">
     <aside class="sidebar">
       <div class="sidebar-header">
         <div class="logo-area">
@@ -30,7 +28,7 @@
             <span class="brand-subtitle">POS SYSTEM</span>
           </div>
         </div>
-        <button class="sidebar-toggle-btn" aria-label="Toggle sidebar">
+        <button class="sidebar-toggle-btn">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -48,11 +46,11 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
           <span>POS / Orders</span>
         </a>
-        <a href="history.html" class="menu-item">
+        <a href="history.html" class="menu-item active">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"></path><path d="M8 7h8"></path><path d="M8 12h8"></path><path d="M8 17h5"></path></svg>
           <span>Order History</span>
         </a>
-        <a href="menu.html" class="menu-item active">
+        <a href="menu.html" class="menu-item">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
           <span>Menu Management</span>
         </a>
@@ -96,66 +94,112 @@
           </div>
         </div>
         <div class="sidebar-copyright">
-          © 2024 Coffee Shop Management System
+          © 2026 Coffee Shop Management System
         </div>
       </div>
     </aside>
 
-    <!-- Main Menu Content -->
-    <main class="menu-main-content">
-      <!-- Top Decorative Hero Banner -->
-      <div class="menu-hero-banner">
-        <div class="hero-overlay-dark"></div>
-        <div class="hero-text-content">
-          <div class="menu-logo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; color: var(--color-accent-caramel);">
-              <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
-              <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
-              <line x1="6" y1="2" x2="6" y2="4" />
-              <line x1="10" y1="2" x2="10" y2="4" />
-              <line x1="14" y1="2" x2="14" y2="4" />
-            </svg>
-            <span>BrewOS Cafe</span>
-          </div>
-          <h1>OUR CRAFTED MENU</h1>
-          <p>Freshly brewed daily with ethically sourced beans &amp; organic ingredients</p>
-        </div>
+    <header class="topbar history-topbar">
+      <div class="history-topbar-left">
+        <div class="history-eyebrow">BrewOS</div>
+        <h1>Order History</h1>
+        <p>Completed and held orders stored on this terminal.</p>
       </div>
 
-      <!-- Centered Menu Wrapper -->
-      <div class="menu-board-wrapper">
-        <!-- Filters & Search Toolbar -->
-        <div class="menu-toolbar">
-          <div class="menu-search-box">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" placeholder="Search beverages or food..." id="menu-search-input" oninput="filterMenuBySearch()">
-          </div>
-
-          <div class="dietary-filters">
-            <button class="dietary-tab active" onclick="filterDiet('All', this)">All Items</button>
-            <button class="dietary-tab" onclick="filterDiet('Veg', this)">Vegetarian</button>
-            <button class="dietary-tab" onclick="filterDiet('Vegan', this)">Vegan</button>
-            <button class="dietary-tab" onclick="filterDiet('Dairy-Free', this)">Dairy Free</button>
-          </div>
+      <div class="history-topbar-right">
+        <div class="topbar-search history-search">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="history-search-input" placeholder="Search orders, items, operators..." oninput="filterHistoryBySearch()">
         </div>
-
-        <!-- Category Grouped Display -->
-        <div class="menu-catalog-layout" id="menu-catalog-layout">
-          <!-- JavaScript renders items here -->
-        </div>
+        <button class="history-reset-btn" onclick="clearHistoryFilters()">Reset</button>
       </div>
+    </header>
 
-      <!-- Footer Info -->
-      <footer class="menu-board-footer">
-        <p>Please inform our baristas of any dietary allergies before ordering.</p>
-        <span>© 2026 BrewOS Systems. All rights reserved.</span>
-      </footer>
+    <main class="dashboard-content history-dashboard-content">
+      <section class="main-area history-main-area">
+        <div class="stats-row history-stats-row">
+          <div class="stat-card">
+            <div class="stat-icon-wrapper sales-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3h18v18H3z"></path>
+                <path d="M8 7h8"></path>
+                <path d="M8 12h8"></path>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Total Orders</span>
+              <span class="stat-value" id="history-total-orders">0</span>
+              <span class="stat-footnote">All recorded transactions</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper orders-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Paid Orders</span>
+              <span class="stat-value" id="history-paid-orders">0</span>
+              <span class="stat-footnote positive">Successful checkouts</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper warning-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3h18v18H3z"></path>
+                <path d="M8 12h8"></path>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Held Orders</span>
+              <span class="stat-value" id="history-held-orders">0</span>
+              <span class="stat-footnote">On hold transactions</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper sold-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 1v22"></path>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Paid Revenue</span>
+              <span class="stat-value" id="history-revenue">₹0.00</span>
+              <span class="stat-footnote positive">Paid orders only</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="history-filter-row">
+          <div class="history-status-tabs">
+            <button class="history-tab active" onclick="filterHistoryByStatus('All', this)">All</button>
+            <button class="history-tab" onclick="filterHistoryByStatus('Paid', this)">Paid</button>
+            <button class="history-tab" onclick="filterHistoryByStatus('Held', this)">Held</button>
+          </div>
+          <div class="history-summary-note" id="history-summary-note">0 orders recorded</div>
+        </div>
+
+        <div class="history-list-shell">
+          <div class="history-list-header">
+            <span>Order</span>
+            <span>Date</span>
+            <span>Operator</span>
+            <span>Total</span>
+          </div>
+          <div id="order-history-list" class="order-history-list"></div>
+        </div>
+      </section>
     </main>
   </div>
 
-  <script src="menu.js"></script>
+  <script src="history.js"></script>
 </body>
 </html>

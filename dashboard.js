@@ -37,6 +37,9 @@ let currentCategoryFilter = 'All';
 let searchFilter = '';
 let likedItems = new Set();
 let dashClockInterval = null;
+let pendingCheckoutOrder = null;
+
+const ORDER_HISTORY_STORAGE_KEY = 'brewos_order_history';
 
 // Initial state matching the WhatsApp image
 const defaultCartInitialState = [
@@ -45,6 +48,82 @@ const defaultCartInitialState = [
   { id: 'chocolate-cake', quantity: 1 },
   { id: 'veg-sandwich', quantity: 1 }
 ];
+
+function formatOrderDateTime(date = new Date()) {
+  const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  return `${dateStr} | ${timeStr}`;
+}
+
+function generateOrderReference(prefix = 'ORD') {
+  const stamp = new Date().toISOString().replace(/\D/g, '').slice(0, 14);
+  const suffix = Math.floor(100 + Math.random() * 900);
+  return `${prefix}-${stamp}-${suffix}`;
+}
+
+function getOrderHistory() {
+  try {
+    const raw = localStorage.getItem(ORDER_HISTORY_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    console.warn('localStorage is unavailable or blocked:', e);
+    return [];
+  }
+}
+
+function saveOrderHistoryEntry(order) {
+  if (!order) return null;
+
+  try {
+    const history = getOrderHistory();
+    history.unshift(order);
+    localStorage.setItem(ORDER_HISTORY_STORAGE_KEY, JSON.stringify(history));
+    return order;
+  } catch (e) {
+    console.warn('Unable to save order history:', e);
+    return order;
+  }
+}
+
+function buildOrderSnapshot(status) {
+  if (cart.length === 0) return null;
+
+  let subtotal = 0;
+  const items = cart.map(item => {
+    const itemTotal = item.price * item.quantity;
+    subtotal += itemTotal;
+    return {
+      id: item.id,
+      name: item.name,
+      quantity: item.quantity,
+      price: item.price,
+      total: itemTotal,
+      image: item.image
+    };
+  });
+
+  const discount = subtotal >= 300 ? subtotal * 0.05 : 0;
+  const taxableAmount = subtotal - discount;
+  const tax = taxableAmount * 0.05;
+  const total = taxableAmount + tax;
+  const createdAt = new Date();
+  const referencePrefix = status === 'Held' ? 'HLD' : 'ORD';
+
+  return {
+    id: generateOrderReference(referencePrefix),
+    status,
+    operator: selectedOperator.name,
+    terminal: 'TERMINAL-01',
+    createdAt: createdAt.toISOString(),
+    displayDateTime: formatOrderDateTime(createdAt),
+    items,
+    subtotal,
+    discount,
+    tax,
+    total
+  };
+}
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -321,14 +400,9 @@ function proceedToPayment() {
     alert('Please add some items to your order first!');
     return;
   }
-  
-  // Calculate values
-  let subtotal = 0;
-  cart.forEach(item => subtotal += item.price * item.quantity);
-  const discount = subtotal >= 300 ? subtotal * 0.05 : 0;
-  const taxableAmount = subtotal - discount;
-  const tax = taxableAmount * 0.05;
-  const total = taxableAmount + tax;
+
+  pendingCheckoutOrder = buildOrderSnapshot('Paid');
+  if (!pendingCheckoutOrder) return;
   
   // Update Modal Values
   const receiptOperator = document.getElementById('receipt-operator');
@@ -340,27 +414,22 @@ function proceedToPayment() {
   const itemsListEl = document.getElementById('receipt-items-list');
   
   if (receiptOperator) receiptOperator.textContent = selectedOperator.name;
-  
-  // Format Date for receipt
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-  if (receiptDateTime) receiptDateTime.textContent = `${dateStr} | ${timeStr}`;
-  
-  if (receiptSubtotal) receiptSubtotal.textContent = `₹${subtotal.toFixed(2)}`;
-  if (receiptDiscount) receiptDiscount.textContent = discount > 0 ? `- ₹${discount.toFixed(2)}` : `₹0.00`;
-  if (receiptTax) receiptTax.textContent = `₹${tax.toFixed(2)}`;
-  if (receiptTotal) receiptTotal.textContent = `₹${total.toFixed(2)}`;
-  
+
+  if (receiptDateTime) receiptDateTime.textContent = pendingCheckoutOrder.displayDateTime;
+  if (receiptSubtotal) receiptSubtotal.textContent = `₹${pendingCheckoutOrder.subtotal.toFixed(2)}`;
+  if (receiptDiscount) receiptDiscount.textContent = pendingCheckoutOrder.discount > 0 ? `- ₹${pendingCheckoutOrder.discount.toFixed(2)}` : `₹0.00`;
+  if (receiptTax) receiptTax.textContent = `₹${pendingCheckoutOrder.tax.toFixed(2)}`;
+  if (receiptTotal) receiptTotal.textContent = `₹${pendingCheckoutOrder.total.toFixed(2)}`;
+
   // Populate Items list in Receipt
   if (itemsListEl) {
     itemsListEl.innerHTML = '';
-    cart.forEach(item => {
+    pendingCheckoutOrder.items.forEach(item => {
       const itemRow = document.createElement('div');
       itemRow.className = 'receipt-item-row';
       itemRow.innerHTML = `
         <span><span class="r-qty">${item.quantity}x</span> ${item.name}</span>
-        <span>₹${(item.price * item.quantity).toFixed(2)}</span>
+        <span>₹${item.total.toFixed(2)}</span>
       `;
       itemsListEl.appendChild(itemRow);
     });
@@ -375,7 +444,12 @@ function proceedToPayment() {
 function closeReceiptModal() {
   const modal = document.getElementById('receipt-modal');
   if (modal) modal.classList.remove('active');
-  
+
+  if (pendingCheckoutOrder) {
+    saveOrderHistoryEntry(pendingCheckoutOrder);
+    pendingCheckoutOrder = null;
+  }
+
   // Clear cart after checkout
   clearCart();
 }
@@ -386,7 +460,12 @@ function holdOrder() {
     alert('No active order to place on hold.');
     return;
   }
-  alert(`Order placed on hold. \nOrder reference: HOLD-${Math.floor(1000 + Math.random() * 9000)}`);
+
+  const heldOrder = buildOrderSnapshot('Held');
+  if (!heldOrder) return;
+
+  saveOrderHistoryEntry(heldOrder);
+  alert(`Order placed on hold. \nOrder reference: ${heldOrder.id}`);
   clearCart();
 }
 
