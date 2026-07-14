@@ -127,6 +127,12 @@ function buildOrderSnapshot(status) {
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
+  // Apply operator's saved display preferences (theme / font / contrast)
+  // so the dashboard reflects settings made on the settings page.
+  if (typeof window.applyOperatorSettings === 'function') {
+    window.applyOperatorSettings();
+  }
+
   // Sync cashier profile header details
   updateDashboardOperator();
 

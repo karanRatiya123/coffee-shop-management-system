@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - BrewOS Coffee Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="settings-page">
+  <div class="dashboard-container active history-page-shell settings-shell">
+    <!-- Background Circles Animation Overlay -->
+    <div class="bg-circles-wrapper variant-brewos-classic" style="position: fixed;" id="bg-circles-container">
+      <div class="animated-grid"></div>
+      <div class="circles-group">
+        <div class="bg-circle circle-1"></div>
+        <div class="bg-circle circle-2"></div>
+        <div class="bg-circle circle-3"></div>
+      </div>
+      <div class="glow-spots">
+        <div class="glow-1"></div>
+        <div class="glow-2"></div>
+      </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-area">
+          <div class="logo-icon-gold">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+              <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+              <line x1="6" y1="2" x2="6" y2="4" />
+              <line x1="10" y1="2" x2="10" y2="4" />
+              <line x1="14" y1="2" x2="14" y2="4" />
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="brand-title">Coffee Shop</span>
+            <span class="brand-subtitle">POS SYSTEM</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="dashboard.html" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>POS / Orders</span>
+        </a>
+        <a href="history.html" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"></path><path d="M8 7h8"></path><path d="M8 12h8"></path><path d="M8 17h5"></path></svg>
+          <span>Order History</span>
+        </a>
+        <a href="menu.html" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          <span>View Menu</span>
+        </a>
+        <a href="inventory.html" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          <span>Inventory</span>
+        </a>
+        <a href="#" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span>Customers</span>
+        </a>
+        <a href="#" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span>Staff Management</span>
+        </a>
+        <a href="feedback.html" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          <span>Feedback</span>
+        </a>
+        <a href="#" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          <span>Reports</span>
+        </a>
+        <a href="settings.html" class="menu-item active">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Settings</span>
+        </a>
+        <a href="#" class="menu-item logout-btn" onclick="logoutSession()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <span>Logout</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="terminal-status-card">
+          <div class="terminal-label">Terminal ID</div>
+          <div class="terminal-id-val">TERMINAL-01</div>
+          <div class="terminal-online-status">
+            <span class="pulse-dot-green"></span>
+            <span>Online</span>
+          </div>
+        </div>
+        <div class="sidebar-copyright">
+          © 2026 Coffee Shop Management System
+        </div>
+      </div>
+    </aside>
+
+    <!-- Top Bar -->
+    <header class="topbar history-topbar settings-topbar">
+      <div class="history-topbar-left">
+        <div class="history-eyebrow">BrewOS</div>
+        <h1>Settings</h1>
+        <p>Personalize your POS experience. Settings apply to your operator only.</p>
+      </div>
+      <div class="history-topbar-right">
+        <a href="dashboard.html" class="history-reset-btn settings-back-btn">Back to Dashboard</a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-content history-dashboard-content settings-main">
+      <section class="main-area history-main-area settings-main-area">
+
+        <!-- Section Tabs -->
+        <div class="settings-tabs" role="tablist" aria-label="Settings sections">
+          <button class="settings-tab-btn active" data-tab="profile" role="tab" aria-selected="true" onclick="switchSettingsTab('profile', this)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>My Profile</span>
+          </button>
+          <button class="settings-tab-btn" data-tab="display" role="tab" aria-selected="false" onclick="switchSettingsTab('display', this)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>Display</span>
+          </button>
+          <button class="settings-tab-btn" data-tab="notifications" role="tab" aria-selected="false" onclick="switchSettingsTab('notifications', this)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span>Notifications</span>
+          </button>
+          <button class="settings-tab-btn" data-tab="quick" role="tab" aria-selected="false" onclick="switchSettingsTab('quick', this)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 13 9 20 9"></polyline><path d="M3 16.5A4.5 4.5 0 0 1 7.5 12H10v-2a4 4 0 0 1 4-4h.5"></path></svg>
+            <span>Quick Preferences</span>
+          </button>
+        </div>
+
+        <!-- ============= A. PROFILE PANEL ============= -->
+        <div class="settings-panel active" id="panel-profile" role="tabpanel">
+          <article class="settings-card">
+            <div class="card-header">
+              <h2>My Profile</h2>
+              <p>Read-only details for the currently signed-in operator.</p>
+            </div>
+
+            <div class="settings-profile-grid">
+              <div class="settings-profile-avatar" id="settings-operator-avatar" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100')"></div>
+              <div class="settings-profile-meta">
+                <div class="settings-meta-row">
+                  <span class="settings-meta-label">Operator Name</span>
+                  <span class="settings-meta-value" id="settings-operator-name">Sarah Jenkins</span>
+                </div>
+                <div class="settings-meta-row">
+                  <span class="settings-meta-label">Role / Position</span>
+                  <span class="settings-meta-value" id="settings-operator-role">Senior Barista</span>
+                </div>
+                <div class="settings-meta-row">
+                  <span class="settings-meta-label">Employee ID</span>
+                  <span class="settings-meta-value" id="settings-employee-id">EMP-1042</span>
+                </div>
+                <div class="settings-meta-row">
+                  <span class="settings-meta-label">Shift Status</span>
+                  <span class="settings-meta-value shift-on-duty">
+                    <span class="pulse-dot-green"></span>
+                    On Duty
+                  </span>
+                </div>
+                <div class="settings-meta-row">
+                  <span class="settings-meta-label">Today's Shifts</span>
+                  <span class="settings-meta-value" id="settings-shift-count">1 / 2 active</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="settings-helper">Profile details are managed by your shift supervisor and cannot be edited from this terminal.</p>
+          </article>
+        </div>
+
+        <!-- ============= B. DISPLAY PANEL ============= -->
+        <div class="settings-panel" id="panel-display" role="tabpanel">
+          <article class="settings-card">
+            <div class="card-header">
+              <h2>Theme &amp; Appearance</h2>
+              <p>Choose how this terminal looks during your shift. Changes apply instantly.</p>
+            </div>
+
+            <form id="settings-display-form" class="settings-form" autocomplete="off">
+              <div class="form-row settings-row-toggle">
+                <div class="settings-row-text">
+                  <label for="setting-theme">Dark theme</label>
+                  <span class="settings-helper">Espresso with gold accents (current default). Toggle off for the light surface.</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="setting-theme" data-setting="theme" checked>
+                  <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </label>
+              </div>
+
+              <div class="form-row">
+                <label for="setting-font-size">Font size</label>
+                <select id="setting-font-size" data-setting="fontSize">
+                  <option value="small">Small</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="large">Large</option>
+                </select>
+              </div>
+
+              <div class="form-row settings-row-toggle">
+                <div class="settings-row-text">
+                  <label for="setting-high-contrast">High contrast mode</label>
+                  <span class="settings-helper">Increases text and accent contrast for easier reading.</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="setting-high-contrast" data-setting="highContrast">
+                  <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </label>
+              </div>
+            </form>
+          </article>
+
+          <article class="settings-card">
+            <div class="card-header">
+              <h2>Language &amp; Regional</h2>
+              <p>Date and time format used on receipts and the dashboard clock.</p>
+            </div>
+            <form id="settings-regional-form" class="settings-form" autocomplete="off">
+              <div class="form-row">
+                <label for="setting-date-format">Date format</label>
+                <select id="setting-date-format" data-setting="dateFormat">
+                  <option value="DD/MM/YYYY" selected>DD/MM/YYYY (e.g. 14/07/2026)</option>
+                  <option value="MM/DD/YYYY">MM/DD/YYYY (e.g. 07/14/2026)</option>
+                  <option value="YYYY-MM-DD">YYYY-MM-DD (ISO, e.g. 2026-07-14)</option>
+                </select>
+              </div>
+            </form>
+          </article>
+        </div>
+
+        <!-- ============= C. NOTIFICATIONS PANEL ============= -->
+        <div class="settings-panel" id="panel-notifications" role="tabpanel">
+          <article class="settings-card">
+            <div class="card-header">
+              <h2>Visual Alerts</h2>
+              <p>Control the pop-up banners and confirmations shown during checkout.</p>
+            </div>
+
+            <form id="settings-notifications-form" class="settings-form" autocomplete="off">
+              <div class="form-row settings-row-toggle">
+                <div class="settings-row-text">
+                  <label for="setting-notifications">Notification pop-ups</label>
+                  <span class="settings-helper">Show toast banners for new orders and shift updates.</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="setting-notifications" data-setting="notifications" checked>
+                  <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </label>
+              </div>
+
+              <div class="form-row">
+                <label for="setting-auto-hide">Auto-hide timer (seconds)</label>
+                <input type="number" id="setting-auto-hide" data-setting="autoHideSeconds" min="1" max="30" value="5">
+                <span class="settings-helper">How long a notification stays on screen before fading out (1-30 seconds).</span>
+              </div>
+
+              <div class="form-row settings-row-toggle">
+                <div class="settings-row-text">
+                  <label for="setting-payment-alerts">Payment completion alerts</label>
+                  <span class="settings-helper">Play a sound and show a confirmation when a payment is processed.</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="setting-payment-alerts" data-setting="paymentAlerts" checked>
+                  <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </label>
+              </div>
+            </form>
+          </article>
+        </div>
+
+        <!-- ============= D. QUICK PREFERENCES PANEL ============= -->
+        <div class="settings-panel" id="panel-quick" role="tabpanel">
+          <article class="settings-card">
+            <div class="card-header">
+              <h2>Payment Preferences</h2>
+              <p>Set the default payment method for quick checkout.</p>
+            </div>
+            <form id="settings-quick-form" class="settings-form" autocomplete="off">
+              <div class="form-row">
+                <label for="setting-default-payment">Default payment method</label>
+                <select id="setting-default-payment" data-setting="defaultPayment">
+                  <option value="Cash" selected>Cash</option>
+                  <option value="Card">Card</option>
+                  <option value="UPI">UPI</option>
+                  <option value="Wallet">Wallet</option>
+                </select>
+              </div>
+
+              <div class="form-row settings-row-toggle">
+                <div class="settings-row-text">
+                  <label for="setting-show-card-info">Show card / UPI info</label>
+                  <span class="settings-helper">Display last 4 digits and method on the receipt. Disable for tighter security.</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="setting-show-card-info" data-setting="showCardInfo">
+                  <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </label>
+              </div>
+            </form>
+          </article>
+
+          <article class="settings-card">
+            <div class="card-header">
+              <h2>Quick Actions</h2>
+              <p>Frequently used shortcuts for this shift.</p>
+            </div>
+            <div class="settings-quick-grid">
+              <div class="settings-quick-tile">
+                <span class="settings-quick-label">Recent transactions</span>
+                <span class="settings-quick-value" id="settings-recent-tx">View on dashboard</span>
+              </div>
+              <div class="settings-quick-tile">
+                <span class="settings-quick-label">Saved payment methods</span>
+                <span class="settings-quick-value" id="settings-saved-pm">1 saved (Cash)</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Sticky Action Bar -->
+        <div class="settings-actions">
+          <button type="button" class="settings-reset-btn" onclick="resetSettingsToDefaults()">Reset to defaults</button>
+          <div class="settings-actions-right">
+            <button type="button" class="settings-cancel-btn" onclick="cancelSettings()">Cancel</button>
+            <button type="button" class="settings-save-btn" onclick="saveSettings()">Save changes</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Success Toast -->
+  <div class="settings-toast" id="settings-toast" role="status" aria-live="polite">
+    <span class="settings-toast-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </span>
+    <span class="settings-toast-text" id="settings-toast-text">Settings saved</span>
+  </div>
+
+  <script src="bg-circles.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>
