@@ -296,3 +296,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Expose for cross-page use (dashboard.js calls this on its own load).
 window.applyOperatorSettings = applyOperatorSettings;
+
+function logoutSession() {
+  try {
+    sessionStorage.removeItem('operatorName');
+    sessionStorage.removeItem('operatorAvatar');
+  } catch (e) {
+    console.warn("sessionStorage is unavailable or blocked:", e);
+  }
+  window.location.href = 'index.html';
+}
+
