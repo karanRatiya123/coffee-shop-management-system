@@ -159,14 +159,13 @@ function setControlValue(id, value) {
 
 // 6. Read the form controls back into a settings object
 function readSettingsFromForm() {
-  const themeChecked = isChecked('setting-theme');
   const autoHide = clampInt(readNumber('setting-auto-hide'), 1, 30, 5);
 
   return {
-    theme: themeChecked ? 'dark' : 'light',
-    fontSize: readSelect('setting-font-size', 'medium'),
-    highContrast: isChecked('setting-high-contrast'),
-    dateFormat: readSelect('setting-date-format', 'DD/MM/YYYY'),
+    theme: document.getElementById('setting-theme') ? (isChecked('setting-theme') ? 'dark' : 'light') : currentSettings.theme,
+    fontSize: document.getElementById('setting-font-size') ? readSelect('setting-font-size', 'medium') : currentSettings.fontSize,
+    highContrast: document.getElementById('setting-high-contrast') ? isChecked('setting-high-contrast') : currentSettings.highContrast,
+    dateFormat: document.getElementById('setting-date-format') ? readSelect('setting-date-format', 'DD/MM/YYYY') : currentSettings.dateFormat,
     notifications: isChecked('setting-notifications'),
     autoHideSeconds: autoHide,
     paymentAlerts: isChecked('setting-payment-alerts'),
