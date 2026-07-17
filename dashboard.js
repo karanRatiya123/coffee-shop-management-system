@@ -38,6 +38,8 @@ let searchFilter = '';
 let likedItems = new Set();
 let dashClockInterval = null;
 let pendingCheckoutOrder = null;
+let selectedPaymentMethod = 'Cash';
+let selectedUpiMode = 'ID';
 
 const ORDER_HISTORY_STORAGE_KEY = 'brewos_order_history';
 
@@ -86,7 +88,7 @@ function saveOrderHistoryEntry(order) {
   }
 }
 
-function buildOrderSnapshot(status) {
+function buildOrderSnapshot(status, paymentDetails = {}) {
   if (cart.length === 0) return null;
 
   let subtotal = 0;
@@ -121,7 +123,8 @@ function buildOrderSnapshot(status) {
     subtotal,
     discount,
     tax,
-    total
+    total,
+    payment: paymentDetails
   };
 }
 
@@ -147,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Render lists
   renderProducts();
   renderCart();
+  setPaymentMethod('Cash');
 
   // Start top bar datetime updates
   startDashboardClock();
@@ -322,6 +326,8 @@ function removeFromCart(productId) {
 // 10. Clear Cart
 function clearCart() {
   cart = [];
+  selectedPaymentMethod = 'Cash';
+  selectedUpiMode = 'ID';
   renderCart();
 }
 
@@ -398,6 +404,157 @@ function updateTotals(subtotal, discount, tax, total) {
   if (discountEl) discountEl.textContent = discount > 0 ? `- ₹${discount.toFixed(2)}` : `₹0.00`;
   if (taxEl) taxEl.textContent = `₹${tax.toFixed(2)}`;
   if (totalEl) totalEl.textContent = `₹${total.toFixed(2)}`;
+
+  updatePaymentPreview(total);
+}
+
+function getCurrentOrderTotal() {
+  if (cart.length === 0) return 0;
+
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const discount = subtotal >= 300 ? subtotal * 0.05 : 0;
+  const taxableAmount = subtotal - discount;
+  const tax = taxableAmount * 0.05;
+  return taxableAmount + tax;
+}
+
+function setPaymentMethod(method) {
+  selectedPaymentMethod = method;
+
+  const buttons = document.querySelectorAll('#payment-modal .payment-method-btn');
+  buttons.forEach(button => {
+    button.classList.toggle('active', button.dataset.method === method);
+  });
+
+  const cashPanel = document.getElementById('cash-payment-panel');
+  const cardPanel = document.getElementById('card-payment-panel');
+  const upiPanel = document.getElementById('upi-payment-panel');
+
+  if (cashPanel) cashPanel.classList.toggle('active', method === 'Cash');
+  if (cardPanel) cardPanel.classList.toggle('active', method === 'Card');
+  if (upiPanel) upiPanel.classList.toggle('active', method === 'UPI');
+
+  if (method === 'UPI') {
+    setUpiMode(selectedUpiMode);
+  }
+
+  updatePaymentPreview(getCurrentOrderTotal());
+}
+
+function setUpiMode(mode) {
+  selectedUpiMode = mode;
+
+  const buttons = document.querySelectorAll('.upi-mode-btn');
+  buttons.forEach(button => {
+    button.classList.toggle('active', button.dataset.mode === mode);
+  });
+
+  const upiIdPanel = document.getElementById('upi-id-panel');
+  const upiQrPanel = document.getElementById('upi-qr-panel');
+
+  if (upiIdPanel) upiIdPanel.classList.toggle('active', mode === 'ID');
+  if (upiQrPanel) upiQrPanel.classList.toggle('active', mode === 'QR');
+}
+
+function resetPaymentModalFields() {
+  selectedUpiMode = 'ID';
+  const cardHolder = document.getElementById('card-holder-input');
+  const cardLast4 = document.getElementById('card-last4-input');
+  const cardAuth = document.getElementById('card-auth-input');
+  const upiId = document.getElementById('upi-id-input');
+  const upiRef = document.getElementById('upi-ref-input');
+  const upiQrRef = document.getElementById('upi-qr-ref-input');
+
+  if (cardHolder) cardHolder.value = '';
+  if (cardLast4) cardLast4.value = '';
+  if (cardAuth) cardAuth.value = '';
+  if (upiId) upiId.value = '';
+  if (upiRef) upiRef.value = '';
+  if (upiQrRef) upiQrRef.value = '';
+}
+
+function updatePaymentPreview(total) {
+  const previewMethodEl = document.getElementById('payment-modal-order-ref');
+  const previewAmountEl = document.getElementById('payment-modal-total');
+
+  if (previewMethodEl) {
+    previewMethodEl.textContent = selectedPaymentMethod === 'Cash' ? 'Cash payment' : `${selectedPaymentMethod} details`;
+  }
+  if (previewAmountEl) previewAmountEl.textContent = `₹${Number(total || 0).toFixed(2)}`;
+}
+
+function buildPaymentDetails(total) {
+  if (selectedPaymentMethod === 'Cash') {
+    return {
+      method: 'Cash',
+      amountDue: total,
+      summary: 'Cash payment'
+    };
+  }
+
+  if (selectedPaymentMethod === 'Card') {
+    const cardHolder = (document.getElementById('card-holder-input')?.value || '').trim();
+    const cardLast4 = (document.getElementById('card-last4-input')?.value || '').replace(/\D/g, '').slice(-4);
+    const cardAuth = (document.getElementById('card-auth-input')?.value || '').trim();
+
+    if (!cardHolder || cardLast4.length !== 4) {
+      alert('Enter the card holder name and the last 4 digits of the card.');
+      return null;
+    }
+
+    return {
+      method: 'Card',
+      amountDue: total,
+      cardHolder,
+      cardLast4,
+      authCode: cardAuth || generateOrderReference('CRD'),
+      summary: `Card ****${cardLast4} ${cardHolder}`
+    };
+  }
+
+  if (selectedUpiMode === 'ID') {
+    const upiId = (document.getElementById('upi-id-input')?.value || '').trim();
+    const upiRef = (document.getElementById('upi-ref-input')?.value || '').trim();
+
+    if (!upiId) {
+      alert('Enter the UPI ID to continue.');
+      return null;
+    }
+
+    return {
+      method: 'UPI',
+      amountDue: total,
+      upiMode: 'ID',
+      upiId,
+      reference: upiRef || generateOrderReference('UPI'),
+      summary: `UPI ID ${upiId}`
+    };
+  }
+
+  return {
+    method: 'UPI',
+    amountDue: total,
+    upiMode: 'QR',
+    reference: (document.getElementById('upi-qr-ref-input')?.value || '').trim() || generateOrderReference('UPI'),
+    summary: 'UPI QR payment'
+  };
+}
+
+function openPaymentModal() {
+  const modal = document.getElementById('payment-modal');
+  if (!modal) return;
+
+  selectedPaymentMethod = 'Cash';
+  selectedUpiMode = 'ID';
+  resetPaymentModalFields();
+  setPaymentMethod('Cash');
+  updatePaymentPreview(getCurrentOrderTotal());
+  modal.classList.add('active');
+}
+
+function closePaymentModal() {
+  const modal = document.getElementById('payment-modal');
+  if (modal) modal.classList.remove('active');
 }
 
 // 13. Proceed to Payment Receipt Modal
@@ -407,10 +564,24 @@ function proceedToPayment() {
     return;
   }
 
-  pendingCheckoutOrder = buildOrderSnapshot('Paid');
+  openPaymentModal();
+}
+
+function confirmPayment() {
+  if (cart.length === 0) {
+    alert('Please add some items to your order first!');
+    return;
+  }
+
+  const total = getCurrentOrderTotal();
+  const paymentDetails = buildPaymentDetails(total);
+  if (!paymentDetails) return;
+
+  pendingCheckoutOrder = buildOrderSnapshot('Paid', paymentDetails);
   if (!pendingCheckoutOrder) return;
-  
-  // Update Modal Values
+
+  closePaymentModal();
+
   const receiptOperator = document.getElementById('receipt-operator');
   const receiptDateTime = document.getElementById('receipt-datetime');
   const receiptSubtotal = document.getElementById('receipt-subtotal');
@@ -418,16 +589,22 @@ function proceedToPayment() {
   const receiptTax = document.getElementById('receipt-tax');
   const receiptTotal = document.getElementById('receipt-total');
   const itemsListEl = document.getElementById('receipt-items-list');
-  
-  if (receiptOperator) receiptOperator.textContent = selectedOperator.name;
 
+  if (receiptOperator) receiptOperator.textContent = selectedOperator.name;
   if (receiptDateTime) receiptDateTime.textContent = pendingCheckoutOrder.displayDateTime;
   if (receiptSubtotal) receiptSubtotal.textContent = `₹${pendingCheckoutOrder.subtotal.toFixed(2)}`;
   if (receiptDiscount) receiptDiscount.textContent = pendingCheckoutOrder.discount > 0 ? `- ₹${pendingCheckoutOrder.discount.toFixed(2)}` : `₹0.00`;
   if (receiptTax) receiptTax.textContent = `₹${pendingCheckoutOrder.tax.toFixed(2)}`;
   if (receiptTotal) receiptTotal.textContent = `₹${pendingCheckoutOrder.total.toFixed(2)}`;
 
-  // Populate Items list in Receipt
+  const receiptPaymentMode = document.getElementById('receipt-payment-mode');
+  const receiptPaymentRef = document.getElementById('receipt-payment-ref');
+
+  if (receiptPaymentMode) receiptPaymentMode.textContent = pendingCheckoutOrder.payment?.method || 'Unknown';
+  if (receiptPaymentRef) {
+    receiptPaymentRef.textContent = pendingCheckoutOrder.payment?.summary || pendingCheckoutOrder.payment?.reference || 'N/A';
+  }
+
   if (itemsListEl) {
     itemsListEl.innerHTML = '';
     pendingCheckoutOrder.items.forEach(item => {
@@ -440,10 +617,9 @@ function proceedToPayment() {
       itemsListEl.appendChild(itemRow);
     });
   }
-  
-  // Show Modal
-  const modal = document.getElementById('receipt-modal');
-  if (modal) modal.classList.add('active');
+
+  const receiptModal = document.getElementById('receipt-modal');
+  if (receiptModal) receiptModal.classList.add('active');
 }
 
 // 14. Close Receipt Modal and Reset Cart
@@ -458,6 +634,9 @@ function closeReceiptModal() {
 
   // Clear cart after checkout
   clearCart();
+  resetPaymentModalFields();
+  selectedPaymentMethod = 'Cash';
+  setPaymentMethod('Cash');
 }
 
 // 15. Hold Order Action

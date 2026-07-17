@@ -58,6 +58,9 @@ function getFilteredHistory() {
       order.status,
       order.operator,
       order.displayDateTime,
+      order.payment?.method,
+      order.payment?.reference,
+      order.payment?.summary,
       itemText
     ].join(' ').toLowerCase();
 
@@ -144,6 +147,11 @@ function renderHistory() {
       <div class="history-order-meta-row">
         <span>Operator</span>
         <strong>${order.operator || 'Unknown'}</strong>
+      </div>
+
+      <div class="history-order-meta-row">
+        <span>Payment</span>
+        <strong>${order.payment?.method || 'N/A'}${order.payment?.summary ? ` · ${order.payment.summary}` : order.payment?.reference ? ` · ${order.payment.reference}` : ''}</strong>
       </div>
 
       <div class="history-item-list">

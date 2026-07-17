@@ -275,7 +275,7 @@
 
           <div class="cart-actions">
             <button class="pay-btn" onclick="proceedToPayment()">
-              <span>Proceed to Payment</span>
+              <span>Collect Payment</span>
               <svg class="pay-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
@@ -316,24 +316,28 @@
       
       <div class="receipt-divider"></div>
       
-      <div class="receipt-details">
-        <div class="receipt-detail-row">
-          <span>Date & Time</span>
-          <span id="receipt-datetime">August 10, 2024 | 10:30 AM</span>
-        </div>
+        <div class="receipt-details">
+          <div class="receipt-detail-row">
+            <span>Date & Time</span>
+            <span id="receipt-datetime">August 10, 2024 | 10:30 AM</span>
+          </div>
         <div class="receipt-detail-row">
           <span>Operator</span>
           <span id="receipt-operator">Sarah Jenkins</span>
         </div>
+          <div class="receipt-detail-row">
+            <span>Terminal</span>
+            <span>TERMINAL-01</span>
+          </div>
+          <div class="receipt-detail-row">
+            <span>Payment Mode</span>
+            <span id="receipt-payment-mode">Cash</span>
+          </div>
         <div class="receipt-detail-row">
-          <span>Terminal</span>
-          <span>TERMINAL-01</span>
+          <span>Payment Details</span>
+          <span id="receipt-payment-ref">N/A</span>
         </div>
-        <div class="receipt-detail-row">
-          <span>Payment Mode</span>
-          <span>Cash / Card</span>
         </div>
-      </div>
       
       <div class="receipt-divider"></div>
       
@@ -363,6 +367,111 @@
       </div>
       
       <button class="close-receipt-btn" onclick="closeReceiptModal()">Print & Close</button>
+    </div>
+  </div>
+
+  <!-- Payment Method Modal -->
+  <div class="payment-modal-overlay" id="payment-modal">
+    <div class="payment-modal-card">
+      <button class="payment-modal-close" type="button" onclick="closePaymentModal()" aria-label="Close payment modal">
+        ×
+      </button>
+      <div class="payment-modal-header">
+        <div class="payment-modal-eyebrow">Checkout</div>
+        <h2>Collect Payment</h2>
+        <p>Select a method, then enter the required details.</p>
+      </div>
+
+      <div class="payment-modal-summary">
+        <div>
+          <span>Amount Due</span>
+          <strong id="payment-modal-total">₹0.00</strong>
+        </div>
+        <div>
+          <span>Method</span>
+          <strong id="payment-modal-order-ref">Cash payment</strong>
+        </div>
+      </div>
+
+      <div class="payment-method-grid">
+        <button class="payment-method-btn active" type="button" data-method="Cash" onclick="setPaymentMethod('Cash')">Cash</button>
+        <button class="payment-method-btn" type="button" data-method="Card" onclick="setPaymentMethod('Card')">Card</button>
+        <button class="payment-method-btn" type="button" data-method="UPI" onclick="setPaymentMethod('UPI')">UPI</button>
+      </div>
+
+      <div class="payment-detail-panels">
+        <div class="payment-panel active" id="cash-payment-panel">
+          <p class="payment-note">Cash payments are counted at the counter. Confirm when the amount is received.</p>
+        </div>
+
+        <div class="payment-panel" id="card-payment-panel">
+          <label for="card-holder-input">Card Holder Name</label>
+          <input type="text" id="card-holder-input" placeholder="Enter card holder name">
+          <label for="card-last4-input">Card Last 4 Digits</label>
+          <input type="text" id="card-last4-input" maxlength="4" inputmode="numeric" placeholder="1234">
+          <label for="card-auth-input">Auth / Reference Code</label>
+          <input type="text" id="card-auth-input" placeholder="Enter card reference code">
+        </div>
+
+        <div class="payment-panel" id="upi-payment-panel">
+          <div class="upi-mode-grid">
+            <button class="upi-mode-btn active" type="button" data-mode="ID" onclick="setUpiMode('ID')">UPI ID</button>
+            <button class="upi-mode-btn" type="button" data-mode="QR" onclick="setUpiMode('QR')">QR</button>
+          </div>
+
+          <div class="upi-mode-panel active" id="upi-id-panel">
+            <label for="upi-id-input">UPI ID</label>
+            <input type="text" id="upi-id-input" placeholder="name@bank">
+            <label for="upi-ref-input">UPI Transaction Ref</label>
+            <input type="text" id="upi-ref-input" placeholder="Enter UPI reference">
+          </div>
+
+          <div class="upi-mode-panel" id="upi-qr-panel">
+            <div class="upi-qr-card">
+              <div class="upi-qr-code" aria-hidden="true">
+                <svg viewBox="0 0 120 120" role="img" aria-label="QR payment code">
+                  <rect width="120" height="120" rx="10" fill="#f7f1e8"></rect>
+                  <rect x="10" y="10" width="28" height="28" rx="4" fill="#201711"></rect>
+                  <rect x="16" y="16" width="16" height="16" fill="#f7f1e8"></rect>
+                  <rect x="14" y="14" width="20" height="20" fill="none" stroke="#f7f1e8" stroke-width="2"></rect>
+                  <rect x="82" y="10" width="28" height="28" rx="4" fill="#201711"></rect>
+                  <rect x="88" y="16" width="16" height="16" fill="#f7f1e8"></rect>
+                  <rect x="86" y="14" width="20" height="20" fill="none" stroke="#f7f1e8" stroke-width="2"></rect>
+                  <rect x="10" y="82" width="28" height="28" rx="4" fill="#201711"></rect>
+                  <rect x="16" y="88" width="16" height="16" fill="#f7f1e8"></rect>
+                  <rect x="14" y="86" width="20" height="20" fill="none" stroke="#f7f1e8" stroke-width="2"></rect>
+                  <rect x="48" y="18" width="8" height="8" fill="#201711"></rect>
+                  <rect x="58" y="18" width="8" height="8" fill="#201711"></rect>
+                  <rect x="48" y="30" width="8" height="8" fill="#201711"></rect>
+                  <rect x="64" y="30" width="8" height="8" fill="#201711"></rect>
+                  <rect x="46" y="46" width="8" height="8" fill="#201711"></rect>
+                  <rect x="58" y="46" width="8" height="8" fill="#201711"></rect>
+                  <rect x="70" y="46" width="8" height="8" fill="#201711"></rect>
+                  <rect x="46" y="58" width="8" height="8" fill="#201711"></rect>
+                  <rect x="58" y="58" width="8" height="8" fill="#201711"></rect>
+                  <rect x="70" y="58" width="8" height="8" fill="#201711"></rect>
+                  <rect x="46" y="70" width="8" height="8" fill="#201711"></rect>
+                  <rect x="58" y="70" width="8" height="8" fill="#201711"></rect>
+                  <rect x="82" y="46" width="8" height="8" fill="#201711"></rect>
+                  <rect x="94" y="46" width="8" height="8" fill="#201711"></rect>
+                  <rect x="82" y="58" width="8" height="8" fill="#201711"></rect>
+                  <rect x="94" y="58" width="8" height="8" fill="#201711"></rect>
+                  <rect x="82" y="70" width="8" height="8" fill="#201711"></rect>
+                  <rect x="94" y="70" width="8" height="8" fill="#201711"></rect>
+                </svg>
+              </div>
+              <p>Scan this QR in your UPI app to complete payment.</p>
+            </div>
+            <label for="upi-qr-ref-input">UPI Transaction Ref</label>
+            <input type="text" id="upi-qr-ref-input" placeholder="Enter UPI reference">
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-modal-footer">
+        <button class="secondary-modal-btn" type="button" onclick="closePaymentModal()">Cancel</button>
+        <button class="primary-modal-btn" type="button" onclick="confirmPayment()">Confirm Payment</button>
+      </div>
     </div>
   </div>
 
