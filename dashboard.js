@@ -628,6 +628,9 @@ function closeReceiptModal() {
   if (modal) modal.classList.remove('active');
 
   if (pendingCheckoutOrder) {
+    if (typeof window.printBill === 'function') {
+      window.printBill(pendingCheckoutOrder);
+    }
     saveOrderHistoryEntry(pendingCheckoutOrder);
     pendingCheckoutOrder = null;
   }

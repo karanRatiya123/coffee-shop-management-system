@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feedback - BrewOS Coffee Shop</title>
+  <title>Coffee Shop POS - Bills</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="feedback-page">
-  <div class="feedback-shell">
+<body class="bills-page">
+  <div class="dashboard-container active history-page-shell bills-page-shell">
     <div class="bg-circles-wrapper variant-brewos-classic" style="position: fixed;" id="bg-circles-container">
       <div class="animated-grid"></div>
       <div class="circles-group">
@@ -18,13 +18,17 @@
         <div class="bg-circle circle-2"></div>
         <div class="bg-circle circle-3"></div>
       </div>
+      <div class="circles-text-container">
+        <h1 class="circles-text-title">BrewOS</h1>
+        <p class="circles-text-desc">Saved Bills Archive</p>
+      </div>
       <div class="glow-spots">
         <div class="glow-1"></div>
         <div class="glow-2"></div>
       </div>
     </div>
 
-    <aside class="sidebar feedback-sidebar">
+    <aside class="sidebar">
       <div class="sidebar-header">
         <div class="logo-area">
           <div class="logo-icon-gold">
@@ -59,7 +63,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"></path><path d="M8 7h8"></path><path d="M8 12h8"></path><path d="M8 17h5"></path></svg>
           <span>Order History</span>
         </a>
-        <a href="bills.html" class="menu-item">
+        <a href="bills.html" class="menu-item active">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l3 3v17H6z"></path><path d="M9 13h6"></path><path d="M9 17h6"></path></svg>
           <span>Bills</span>
         </a>
@@ -67,7 +71,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
           <span>View Menu</span>
         </a>
-        <a href="feedback.html" class="menu-item active">
+        <a href="feedback.html" class="menu-item">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
           <span>Feedback</span>
         </a>
@@ -84,112 +88,116 @@
       <div class="sidebar-footer">
         <div class="terminal-status-card">
           <div class="terminal-label">Terminal ID</div>
-          <div class="terminal-id-val">POS-042</div>
+          <div class="terminal-id-val">TERMINAL-01</div>
           <div class="terminal-online-status">
             <span class="pulse-dot-green"></span>
             <span>Online</span>
           </div>
         </div>
+        <div class="sidebar-copyright">
+          © 2026 Coffee Shop Management System
+        </div>
       </div>
     </aside>
 
-    <main class="feedback-main-content">
-      <header class="feedback-topbar">
-        <div>
-          <p class="feedback-eyebrow">Customer Experience</p>
-          <h1>We Value Your Feedback</h1>
-          <p class="feedback-intro">Help us improve your experience with a quick rating, category, and comment.</p>
+    <header class="topbar history-topbar">
+      <div class="history-topbar-left">
+        <div class="history-eyebrow">BrewOS</div>
+        <h1>Bills</h1>
+        <p>Saved paid bills. Reprint any bill for a customer who forgot it.</p>
+      </div>
+
+      <div class="history-topbar-right">
+        <div class="topbar-search history-search">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="bills-search-input" placeholder="Search bills, items, payment..." oninput="filterBillsBySearch()">
         </div>
-        <button type="button" class="feedback-back-btn" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
-      </header>
+        <button class="history-reset-btn" onclick="clearBillsFilters()">Reset</button>
+      </div>
+    </header>
 
-      <section class="feedback-grid">
-        <div class="feedback-card form-card">
-          <div class="card-header">
-            <h2>Share your experience</h2>
-            <p>Your feedback helps our team improve quickly.</p>
-          </div>
-
-          <div id="feedback-error" class="feedback-message error"></div>
-          <div id="feedback-success" class="feedback-message success"></div>
-
-          <div id="feedback-success-state" class="feedback-success-state hidden">
-            <div class="success-state-hero">Thank you for your feedback!</div>
-            <p>We appreciate your input and will use it to improve service, quality, and speed.</p>
-            <div class="success-actions">
-              <button type="button" class="secondary-btn" id="feedback-another-btn">Share another feedback</button>
-              <button type="button" class="secondary-btn" onclick="window.location.href='dashboard.html'">Back to dashboard</button>
+    <main class="dashboard-content history-dashboard-content bills-dashboard-content">
+      <section class="main-area history-main-area">
+        <div class="stats-row bills-stats-row">
+          <div class="stat-card">
+            <div class="stat-icon-wrapper sales-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3h18v18H3z"></path>
+                <path d="M8 7h8"></path>
+                <path d="M8 12h8"></path>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Total Bills</span>
+              <span class="stat-value" id="bills-total-count">0</span>
+              <span class="stat-footnote">All saved paid bills</span>
             </div>
           </div>
 
-          <form id="feedback-form" class="feedback-form">
-            <div class="form-row">
-              <label for="feedback-name">Name</label>
-              <input id="feedback-name" name="name" type="text" placeholder="Your name or customer ID">
+          <div class="stat-card">
+            <div class="stat-icon-wrapper orders-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 13l4 4L19 7"></path>
+              </svg>
             </div>
-
-            <div class="form-row">
-              <label for="feedback-email">Email</label>
-              <input id="feedback-email" name="email" type="email" placeholder="you@example.com">
+            <div class="stat-info">
+              <span class="stat-label">Today's Bills</span>
+              <span class="stat-value" id="bills-today-count">0</span>
+              <span class="stat-footnote positive">Printed today</span>
             </div>
+          </div>
 
-            <div class="form-row">
-              <label>How was your experience?</label>
-              <div class="stars" id="rating-stars" aria-label="rating">
-                <button type="button" class="star-btn" data-value="1" aria-label="1 star">&#9733;</button>
-                <button type="button" class="star-btn" data-value="2" aria-label="2 stars">&#9733;</button>
-                <button type="button" class="star-btn" data-value="3" aria-label="3 stars">&#9733;</button>
-                <button type="button" class="star-btn" data-value="4" aria-label="4 stars">&#9733;</button>
-                <button type="button" class="star-btn" data-value="5" aria-label="5 stars">&#9733;</button>
-              </div>
-              <span id="rating-label" class="rating-label">Select a rating</span>
+          <div class="stat-card">
+            <div class="stat-icon-wrapper sold-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 1v22"></path>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
             </div>
-
-            <div class="form-row">
-              <label for="feedback-category">Category</label>
-              <select id="feedback-category" name="category">
-                <option value="">Choose a topic</option>
-                <option value="Food quality">Food quality</option>
-                <option value="Service">Service</option>
-                <option value="Speed">Speed</option>
-                <option value="Cleanliness">Cleanliness</option>
-                <option value="Ambience">Ambience</option>
-              </select>
+            <div class="stat-info">
+              <span class="stat-label">Revenue</span>
+              <span class="stat-value" id="bills-revenue">₹0.00</span>
+              <span class="stat-footnote positive">Paid bills only</span>
             </div>
+          </div>
 
-            <div class="form-row">
-              <label for="feedback-comment">Comments</label>
-              <textarea id="feedback-comment" name="comment" rows="5" placeholder="Tell us what went well or what can be improved..."></textarea>
+          <div class="stat-card">
+            <div class="stat-icon-wrapper warning-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3h18v18H3z"></path>
+                <path d="M8 12h8"></path>
+              </svg>
             </div>
-
-            <button type="submit" class="feedback-submit-btn">Submit feedback</button>
-          </form>
+            <div class="stat-info">
+              <span class="stat-label">Average Bill</span>
+              <span class="stat-value" id="bills-average">₹0.00</span>
+              <span class="stat-footnote">Average paid ticket</span>
+            </div>
+          </div>
         </div>
 
-        <div class="feedback-card summary-card">
-          <div class="card-header">
-            <h2>Recent feedback</h2>
-            <p>Latest customer comments are shown here.</p>
-          </div>
+        <div class="history-filter-row bills-filter-row">
+          <div class="history-summary-note" id="bills-summary-note">0 bills saved</div>
+        </div>
 
-          <div class="summary-metrics">
-            <div class="metric-pill">
-              <span class="metric-label">Reviews</span>
-              <strong id="feedback-count">0</strong>
-            </div>
-            <div class="metric-pill">
-              <span class="metric-label">Average rating</span>
-              <strong id="feedback-average">0.0 / 5</strong>
-            </div>
+        <div class="history-list-shell">
+          <div class="history-list-header bills-list-header">
+            <span>Bill</span>
+            <span>Date</span>
+            <span>Payment</span>
+            <span>Total</span>
           </div>
-
-          <div id="recent-feedback-list" class="recent-feedback-list"></div>
+          <div id="bills-list" class="order-history-list"></div>
         </div>
       </section>
     </main>
   </div>
 
   <script src="bg-circles.js"></script>
-  <script src="feedback.js"></script>
+  <script src="bill-utils.js"></script>
+  <script src="bills.js"></script>
 </body>
 </html>

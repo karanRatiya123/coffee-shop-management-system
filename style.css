@@ -3044,6 +3044,63 @@ body.history-page {
   display: none;
 }
 
+body.bills-page {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: auto;
+  min-height: 100vh;
+  display: block;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.bills-page-shell {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  overflow: visible;
+  z-index: 1;
+}
+
+.bills-page-shell.dashboard-container {
+  position: relative;
+  top: auto;
+  left: auto;
+  display: grid;
+  height: auto;
+  min-height: 100vh;
+  width: 100%;
+  overflow: visible;
+}
+
+.bills-page-shell .sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.bills-page-shell .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.bills-page-shell .dashboard-content {
+  grid-template-columns: 1fr;
+  height: auto;
+  overflow: visible;
+}
+
+.bills-page-shell .main-area {
+  height: auto;
+  overflow: visible;
+}
+
+.bills-page-shell .cart-panel {
+  display: none;
+}
+
 .history-topbar {
   justify-content: space-between;
   gap: 20px;
@@ -3352,6 +3409,35 @@ body.history-page {
 .history-empty-state p {
   font-size: 13px;
   line-height: 1.5;
+}
+
+.bill-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bill-print-btn {
+  border: 1px solid rgba(228, 158, 84, 0.2);
+  background: rgba(228, 158, 84, 0.08);
+  color: var(--color-accent-caramel);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  white-space: nowrap;
+}
+
+.bill-print-btn:hover {
+  background: rgba(228, 158, 84, 0.16);
+  border-color: rgba(228, 158, 84, 0.35);
+}
+
+.bills-page-shell .history-list-header {
+  grid-template-columns: 1.1fr 1fr 1fr 0.6fr;
 }
 
 @media (max-width: 1200px) {
