@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coffee Shop POS - Order History</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="history-page">
+  <div class="dashboard-container active history-page-shell">
+    <!-- Background Circles Animation Overlay -->
+    <div class="bg-circles-wrapper variant-brewos-classic" style="position: fixed;" id="bg-circles-container">
+      <div class="animated-grid"></div>
+      <div class="circles-group">
+        <div class="bg-circle circle-1"></div>
+        <div class="bg-circle circle-2"></div>
+        <div class="bg-circle circle-3"></div>
+      </div>
+      
+      <!-- Text & Details inside Circles -->
+      <div class="circles-text-container">
+        <h1 class="circles-text-title">BrewOS</h1>
+        <p class="circles-text-desc">POS Terminal Archive</p>
+      </div>
+
+      <div class="glow-spots">
+        <div class="glow-1"></div>
+        <div class="glow-2"></div>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-area">
+          <div class="logo-icon-gold">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+              <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+              <line x1="6" y1="2" x2="6" y2="4" />
+              <line x1="10" y1="2" x2="10" y2="4" />
+              <line x1="14" y1="2" x2="14" y2="4" />
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="brand-title">Coffee Shop</span>
+            <span class="brand-subtitle">POS SYSTEM</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="history.html" class="menu-item active">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"></path><path d="M8 7h8"></path><path d="M8 12h8"></path><path d="M8 17h5"></path></svg>
+          <span>Order History</span>
+        </a>
+        <a href="bills.html" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l3 3v17H6z"></path><path d="M9 13h6"></path><path d="M9 17h6"></path></svg>
+          <span>Bills</span>
+        </a>
+        <a href="menu.html" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"></path><path d="M8 8h8"></path><path d="M8 12h8"></path><path d="M8 16h5"></path></svg>
+          <span>View Menu</span>
+        </a>
+        <a href="feedback.html" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          <span>Feedback</span>
+        </a>
+        <a href="settings.html" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Settings</span>
+        </a>
+        <a href="#" class="menu-item logout-btn" onclick="logoutSession()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <span>Logout</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="terminal-status-card">
+          <div class="terminal-label">Terminal ID</div>
+          <div class="terminal-id-val">TERMINAL-01</div>
+          <div class="terminal-online-status">
+            <span class="pulse-dot-green"></span>
+            <span>Online</span>
+          </div>
+        </div>
+        <div class="sidebar-copyright">
+          © 2026 Coffee Shop Management System
+        </div>
+      </div>
+    </aside>
+
+    <header class="topbar history-topbar">
+      <div class="history-topbar-left">
+        <div class="history-eyebrow">BrewOS</div>
+        <h1>Order History</h1>
+        <p>Completed and held orders stored on this terminal.</p>
+      </div>
+
+      <div class="history-topbar-right">
+        <div class="topbar-search history-search">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="history-search-input" placeholder="Search orders, items, operators..." oninput="filterHistoryBySearch()">
+        </div>
+        <button class="history-reset-btn" onclick="clearHistoryFilters()">Reset</button>
+      </div>
+    </header>
+
+    <main class="dashboard-content history-dashboard-content">
+      <section class="main-area history-main-area">
+        <div class="stats-row history-stats-row">
+          <div class="stat-card">
+            <div class="stat-icon-wrapper sales-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3h18v18H3z"></path>
+                <path d="M8 7h8"></path>
+                <path d="M8 12h8"></path>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Total Orders</span>
+              <span class="stat-value" id="history-total-orders">0</span>
+              <span class="stat-footnote">All recorded transactions</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper orders-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Paid Orders</span>
+              <span class="stat-value" id="history-paid-orders">0</span>
+              <span class="stat-footnote positive">Successful checkouts</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper warning-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3h18v18H3z"></path>
+                <path d="M8 12h8"></path>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Held Orders</span>
+              <span class="stat-value" id="history-held-orders">0</span>
+              <span class="stat-footnote">On hold transactions</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper sold-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 1v22"></path>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Paid Revenue</span>
+              <span class="stat-value" id="history-revenue">₹0.00</span>
+              <span class="stat-footnote positive">Paid orders only</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="history-filter-row">
+          <div class="history-status-tabs">
+            <button class="history-tab active" onclick="filterHistoryByStatus('All', this)">All</button>
+            <button class="history-tab" onclick="filterHistoryByStatus('Paid', this)">Paid</button>
+            <button class="history-tab" onclick="filterHistoryByStatus('Held', this)">Held</button>
+          </div>
+          <div class="history-summary-note" id="history-summary-note">0 orders recorded</div>
+        </div>
+
+        <div class="history-list-shell">
+          <div class="history-list-header">
+            <span>Order</span>
+            <span>Date</span>
+            <span>Operator</span>
+            <span>Total</span>
+          </div>
+          <div id="order-history-list" class="order-history-list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/bg-circles.js"></script>
+  <script src="js/history.js"></script>
+</body>
+</html>

@@ -1,69 +1,270 @@
-# BrewOS Coffee Shop Management System - POS Terminal
+# BrewOS POS — Coffee Shop Management System
 
-A modern, dark-themed, and responsive Coffee Shop Point of Sale (POS) terminal built with vanilla HTML, CSS, and JavaScript. Styled in a premium dark-espresso color palette with caramel-gold gradients and subtle hover micro-animations, this terminal provides a full suite of features for cashier operations, menu exploration, order history, customer feedback, and customizable operator preferences.
+[![GitHub](https://img.shields.io/badge/GitHub-karanRatiya123-181717?logo=github)](https://github.com/karanRatiya123/coffee-shop-management-system)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/karanRatiya123/coffee-shop-management-system)
+[![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)](https://openjdk.org/)
+[![Tomcat](https://img.shields.io/badge/Tomcat-10.1-yellow?logo=apachetomcat)](https://tomcat.apache.org/)
+[![MySQL](https://img.shields.io/badge/MySQL-8-blue?logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![Jakarta Servlet](https://img.shields.io/badge/Jakarta-Servlet-red)](https://jakarta.ee/)
+[![Frontend](https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20JS-informational)](#)
+[![Status](https://img.shields.io/badge/status-active-success)](https://github.com/karanRatiya123/coffee-shop-management-system)
 
-## 📸 Interface Preview
+> **Repo:** [coffee-shop-management-system](https://github.com/karanRatiya123/coffee-shop-management-system)  
+> **Brand:** BrewOS POS v4.2  
+> **Stack:** Java 21 · Jakarta Servlet API · MySQL (JDBC) · HTML / CSS / Vanilla JS · Apache Tomcat 10.1
 
-![POS Dashboard Mockup](assets/cashier_dashboard.jpg)
-*Figure 1: Premium Cashier Dashboard view featuring active product catalog, category tabs, and real-time checkout cart panel.*
+### GitHub topic labels (suggested)
 
-![POS Operator Login Mockup](assets/login_screen.jpg)
-*Figure 2: Operator Login and PIN pad screen design with active operators list.*
+Use these labels/topics on the repo for discoverability:
 
----
-
-## 📁 Project Architecture & Components
-
-Below is the directory structure and a list of key files with clickable links:
-
-### HTML Views (UI Screens)
-*   **[index.html](file:///D:/MAIN%20PROJECT/index.html)**: The landing screen representing the operator sign-in page. It features an interactive operator selection dropdown, a tactile PIN pad, and a session-sync loader overlay.
-*   **[dashboard.html](file:///D:/MAIN%20PROJECT/dashboard.html)**: The main POS terminal view. This dashboard displays the product grid catalog, horizontal category tabs, today's metrics, and the real-time order cart.
-*   **[history.html](file:///D:/MAIN%20PROJECT/history.html)**: Persistent order history view for completed and held transactions.
-*   **[menu.html](file:///D:/MAIN%20PROJECT/menu.html)**: The digital menu board catalog page. It allows cashiers or customers to explore recipes, review detailed ingredient lists, view calories/sugar specs, check stock counts, and filter by dietary tabs (Veg, Vegan, Dairy-Free).
-*   **[feedback.html](file:///D:/MAIN%20PROJECT/feedback.html)**: Customer and staff experience rating page featuring interactive star ratings, categories, recent reviews, and live review metrics.
-*   **[settings.html](file:///D:/MAIN%20PROJECT/settings.html)**: Operator preferences and profile page containing display customization, visual alerts, and quick checkout settings.
-
-### JavaScript Logic (Behavioral Layer)
-*   **[script.js](file:///D:/MAIN%20PROJECT/script.js)**: Holds the sign-in business logic. Evaluates operator PIN codes and uses `sessionStorage` to carry session credentials onto the dashboard.
-*   **[dashboard.js](file:///D:/MAIN%20PROJECT/dashboard.js)**: Directs POS business logic on the main screen, including live search filtering, catalog management, real-time cart calculations (discounting, tax, totals), held orders, checkout modals, and session logout redirection.
-*   **[history.js](file:///D:/MAIN%20PROJECT/history.js)**: Renders stored orders from `localStorage`, including paid and held statuses, totals, and search/filter controls.
-*   **[menu.js](file:///D:/MAIN%20PROJECT/menu.js)**: Manages catalog state, live search, and categorized views on the menu catalog page.
-*   **[feedback.js](file:///D:/MAIN%20PROJECT/feedback.js)**: Manages submission validation, storage, and statistics computation for feedback reviews.
-*   **[settings.js](file:///D:/MAIN%20PROJECT/settings.js)**: Applies dynamic settings (e.g. font adjustments), validates profile changes, and syncs settings to `localStorage` per operator.
-*   **[bg-circles.js](file:///D:/MAIN%20PROJECT/bg-circles.js)**: Controls the fluid ambient glowing circles animations in the background across different pages.
-
-### Design Systems & Project Plans
-*   **[style.css](file:///D:/MAIN%20PROJECT/style.css)**: A unified styling system styled in a premium dark-espresso color palette with caramel-gold gradients and subtle hover micro-animations. It implements responsive grids and flex layouts for desktops, tablets, and mobile devices.
-*   **[reqements.md](file:///D:/MAIN%20PROJECT/reqements.md)**: Product requirements plan outlining scope, stakeholders (Admin, Employee, Customer), core functional requirements, and upcoming smart AI features.
-*   **[db.md](file:///D:/MAIN%20PROJECT/db.md)**: Conceptual database schema planning document mapping out relational tables like users, categories, products, inventory, orders, feedback, and AI insights.
-*   **[feedback.md](file:///D:/MAIN%20PROJECT/feedback.md)**: Design notes and execution strategy for the feedback submission system.
-*   **[settings.md](file:///D:/MAIN%20PROJECT/settings.md)**: Functional breakdown and implementation phases for the barista settings page.
+| Label / topic | Meaning |
+|---------------|---------|
+| `pos` | Point-of-sale application |
+| `coffee-shop` | Domain / coffee shop ops |
+| `java` | Backend language |
+| `jakarta-servlet` | Servlet API endpoints |
+| `mysql` | Database |
+| `tomcat` | Application server |
+| `vanilla-js` | No frontend framework |
+| `eclipse-dynamic-web` | Eclipse WTP project layout |
 
 ---
 
-## ☕ Operator Passcodes
+## 1. What this project does
 
-To simulate shifts, select an active operator on the sign-in screen and enter the corresponding 4-digit passcode:
+BrewOS POS is a cashier / counter-operations terminal that lets coffee-shop staff:
 
-| Operator Name | Shift Role | Passcode |
-| :--- | :--- | :--- |
-| **Sarah Jenkins** | Senior Barista | `1234` |
-| **Marcus Thorne** | Shift Supervisor | `5678` |
-| **Elena Rostova** | Barista | `1111` |
-| **Devon Miller** | Trainee | `0000` |
+1. Sign in with a 4-digit PIN (operator sign-in screen).
+2. Browse menu items grouped by category.
+3. Add items to a cart, apply discount & tax, choose a payment method (Cash / Card / UPI).
+4. Confirm payment → generate a printable receipt and persist the order.
+5. View live dashboard stats (today's sales, orders, items sold, low-stock items).
+6. Look up archived bills, full order history, and customer feedback.
+
+The backend is a set of `@WebServlet`-annotated HTTP endpoints that return JSON; the frontend is plain HTML + JS that calls them with `fetch()`.
 
 ---
 
-## 🚀 Key POS Features
+## 2. Folder structure
 
-1.  **Operator Shifts & Sessions**: Cashier details are carried dynamically onto the dashboard header, synchronizing session date/times using `sessionStorage`.
-2.  **Live Catalog Search & Categories**: Horizontal category tabs filter products by category. The top bar search input filters the grid catalog dynamically.
-3.  **Item Favoriting**: Cashiers can toggle favorite icons on any product card, updating operator preferences dynamically.
-4.  **Automatic Pricing Cart**: Adds items to the current order cart, computes subtotals, applies a 5% discount for orders above ₹300, adds 5% tax, and calculates grand totals in real-time.
-5.  **Checkout & Receipts**: Clicking "Proceed to Payment" populates a detailed printable receipt modal before clearing the current order.
-6.  **Hold Transactions**: Places a transaction on hold and prints a generated hold reference ID.
-7.  **Order History**: Completed and held orders are saved locally in `localStorage` and can be reviewed later from the sidebar.
-8.  **Customer Feedback**: Enables customers or staff to submit ratings and comments. Includes average calculations and lists recent reviews in real-time.
-9.  **Barista Settings**: Allows supervisors and baristas to personalize their interface (theme toggles, font resizing, and toast alerts) dynamically per session.
+```
+MAIN PROJECT/   (GitHub repo root)
+├── README.md                         # This documentation
+├── .gitignore                        # Excludes local/sensitive files from Git
+├── .project                          # Optional Eclipse outer workspace marker
+└── Test/                             # Eclipse Dynamic Web Project (deployed as /Test)
+    ├── .classpath                    # JRE 21, Tomcat 10.1, MySQL driver
+    ├── .project                      # Eclipse project metadata
+    ├── db-migration-add-avatar.sql   # SQL to add users.avatar column
+    └── src/main/
+        ├── java/Backend/             # Java source
+        │   ├── dao/                  # JDBC Data Access Objects
+        │   ├── model/                # POJO entities (+ optional lib JARs)
+        │   ├── servlet/              # @WebServlet HTTP APIs
+        │   ├── test/                 # Dev/test helpers
+        │   └── util/                 # DBConnection
+        └── webapp/                   # Web root served by Tomcat
+            ├── assets/               # Login hero image (side panel)
+            │   └── coffee_shop_pos_hero.jpg
+            ├── images/               # UI images + default operator avatar
+            │   ├── coffee_shop_pos_hero.jpg
+            │   ├── cashier_dashboard.jpg
+            │   ├── login_screen.jpg
+            │   └── default-avatar.svg
+            ├── css/style.css         # Global theme + login hero background
+            ├── js/                   # Page scripts
+            ├── index.html            # PIN login (side image + operator picker)
+            ├── dashboard.html        # POS register
+            ├── menu.html             # Menu browser
+            ├── inventory.html        # Stock
+            ├── bills.html            # Bills archive
+            ├── history.html          # Order history
+            ├── feedback.html         # Feedback
+            ├── settings.html         # Operator settings
+            ├── META-INF/
+            └── WEB-INF/lib/          # mysql-connector-j-9.7.0.jar
+```
 
+### Not pushed to GitHub (see `.gitignore`)
+
+| Path | Why excluded |
+|------|----------------|
+| `build_obsidian_vault.py` | Local Obsidian docs generator with machine-specific paths |
+| `Test/build/` | Compiled `.class` output (regenerated by Eclipse/javac) |
+| `.settings/` | Eclipse IDE local prefs |
+| `.env`, secrets, dumps | Credentials / local data |
+
+---
+
+## 3. Important files & what they do
+
+### 3.1 Must-know files (highest importance)
+
+| File | Importance | Purpose |
+|------|------------|---------|
+| `Test/src/main/java/Backend/util/DBConnection.java` | Critical | MySQL connection (`coffee_shope_system`) |
+| `Test/src/main/java/Backend/servlet/LoginServlet.java` | Critical | PIN auth + `HttpSession` |
+| `Test/src/main/java/Backend/servlet/OperatorServlet.java` | Critical | Active operators + avatar JSON for login |
+| `Test/src/main/java/Backend/dao/UserDAO.java` | Critical | `login()` + `getAllOperators()` |
+| `Test/src/main/webapp/index.html` | Critical | Login UI (left hero + PIN pad) |
+| `Test/src/main/webapp/js/script.js` | Critical | Login logic, operator dropdown, avatar URLs |
+| `Test/src/main/webapp/css/style.css` | Critical | Theme; `.hero-panel` uses `../assets/coffee_shop_pos_hero.jpg` |
+| `Test/src/main/webapp/assets/coffee_shop_pos_hero.jpg` | High | **Login side image** |
+| `Test/src/main/webapp/images/default-avatar.svg` | High | Fallback employee avatar |
+| `Test/db-migration-add-avatar.sql` | High | Adds/fixes `users.avatar` column |
+
+### 3.2 Configuration / build
+
+| File | Purpose |
+|------|---------|
+| `Test/.classpath` | JRE 21, `src/main/java`, Tomcat 10.1, MySQL JAR |
+| `Test/.project` | Eclipse Dynamic Web Project metadata |
+| `Test/src/main/webapp/WEB-INF/lib/mysql-connector-j-9.7.0.jar` | MySQL JDBC driver |
+
+### 3.3 `Backend/model/` — POJOs
+
+| File | Fields |
+|------|--------|
+| `Menu.java` | `menuId, categoryId, itemName, description, price, availability, image` |
+| `Category.java` | `categoryId, categoryName, description` |
+| `Order.java` | `orderId, customerId, employeeId, tableId, orderDate, status, subtotal, discount, totalAmount` |
+| `OrderDetail.java` | `orderDetailId, orderId, menuId, quantity, unitPrice, subtotal` |
+| `Billing.java` | `billId, orderId, billDate, subtotal, discount, tax, grandTotal, paymentMethod, paymentStatus` |
+| `Customer.java` | `customerId, name, phone, email, loyaltyPoints` |
+| `Feedback.java` | `feedbackId, customerId, orderId, rating, comments, feedbackDate` |
+| `Inventory.java` | `inventoryId, itemName, category, quantity, unit, minimumStock, status` |
+| `Offer.java` | `offerId, offerName, description, discount, startDate, endDate, status` |
+| `user.java` | `userId, username, email, pinCode, role, status, avatar` |
+
+### 3.4 `Backend/dao/` — Data Access Objects
+
+| File | Key queries |
+|------|------------|
+| `UserDAO.java` | `login(username, pin)`, `getAllOperators()` (includes `avatar`) |
+| `MenuDAO.java` | Available menu items |
+| `CategoryDAO.java` | Categories |
+| `OrderDAO.java` | Orders + today sales/counts + insert |
+| `OrderDetailDAO.java` | Line items |
+| `BillingDAO.java` | Bills |
+| `CustomerDAO.java` | Customers |
+| `FeedbackDAO.java` | Feedback list/add |
+| `InventoryDAO.java` | Stock + low-stock |
+| `OfferDAO.java` | Offers |
+
+### 3.5 `Backend/servlet/` — HTTP endpoints
+
+Context path: **`/Test`**. Example: `http://localhost:8080/Test/LoginServlet`
+
+| Servlet | URL | Methods | Returns |
+|---------|-----|---------|---------|
+| `LoginServlet` | `/LoginServlet` | `POST {username, pin}` | `200` / `401` + session |
+| `OperatorServlet` | `/OperatorServlet` | `GET` | Active operators + avatar |
+| `MenuServlet` | `/MenuServlet` | `GET` | Menu JSON |
+| `CategoryServlet` | `/CategoryServlet` | `GET` | Categories |
+| `OrderServlet` | `/OrderServlet` | `GET` / `POST` | List / create order |
+| `OrderHistoryServlet` | `/OrderHistoryServlet` | `GET` | Completed/paid orders |
+| `BillingServlet` | `/BillingServlet` | `GET` | Bills |
+| `InventoryServlet` | `/InventoryServlet` | `GET` | Inventory |
+| `CustomerServlet` | `/CustomerServlet` | `GET` | Customers |
+| `FeedbackServlet` | `/FeedbackServlet` | `GET` / `POST` | Feedback |
+| `DashboardServlet` | `/DashboardServlet` | `GET` | Dashboard aggregates |
+| `OfferServlet` | `/OfferServlet` | `GET` | Offers |
+
+### 3.6 Frontend pages
+
+| Page | Script | Backend |
+|------|--------|---------|
+| `index.html` — PIN login | `js/script.js` | `OperatorServlet`, `LoginServlet` |
+| `dashboard.html` — POS | `js/dashboard.js` | Menu/Category/Dashboard/Order |
+| `menu.html` | `js/menu.js` | Menu, Category |
+| `inventory.html` | inline | Inventory |
+| `bills.html` | `js/bills.js` | OrderHistory + `bill-utils.js` |
+| `history.html` | `js/history.js` | OrderHistory |
+| `feedback.html` | `js/feedback.js` | Feedback |
+| `settings.html` | `js/settings.js` | Operator profile (avatar) |
+
+---
+
+## 4. Database schema
+
+Database: **`coffee_shope_system`** on `localhost:3306` (user `root`, empty password by default in `DBConnection.java`).
+
+| Table | Key columns |
+|-------|------------|
+| `users` | `user_id, username, email, pin_code, role, status, **avatar**` |
+| `categories` | `category_id, category_name, description` |
+| `menu_items` | `menu_id, category_id, item_name, description, price, availability, image` |
+| `customers` | `customer_id, name, phone, email, loyalty_points` |
+| `orders` | `order_id, customer_id, employee_id, table_id, order_date, status, subtotal, discount, total_amount` |
+| `order_details` | `order_detail_id, order_id, menu_id, quantity, unit_price, subtotal` |
+| `billing` | `bill_id, order_id, bill_date, subtotal, discount, tax, grand_total, payment_method, payment_status` |
+| `inventory` | `inventory_id, item_name, category, quantity, unit, minimum_stock, status` |
+| `feedback` | `feedback_id, customer_id, order_id, rating, comments, feedback_date` |
+| `offers` | `offer_id, offer_name, description, discount, start_date, end_date, status` |
+
+Avatar setup (if needed):
+
+```sql
+-- See Test/db-migration-add-avatar.sql
+ALTER TABLE users ADD COLUMN avatar VARCHAR(255) DEFAULT NULL;
+UPDATE users SET avatar = 'images/default-avatar.svg' WHERE username = 'karan';
+-- Custom photo: copy file to webapp/images/karan.jpg then:
+-- UPDATE users SET avatar = 'images/karan.jpg' WHERE username = 'karan';
+```
+
+---
+
+## 5. Request flow (login → dashboard)
+
+```
+Browser (index.html)
+   │  fetch("OperatorServlet")  → operators + avatar
+   │  User selects operator + PIN
+   │  fetch("LoginServlet", POST) → 200 + HttpSession / 401
+   └─► redirect dashboard.html
+```
+
+Checkout uses `OrderServlet` (POST) plus client-side receipt UI in `dashboard.js`.
+
+---
+
+## 6. Setup / how to run
+
+1. Import `Test/` into Eclipse (Dynamic Web Project) with **Java 21** + **Tomcat 10.1**.
+2. Create MySQL schema `coffee_shope_system` and tables above; run `db-migration-add-avatar.sql` if needed.
+3. Deploy the project with context path **`/Test`**.
+4. Open: `http://localhost:8080/Test/`
+
+Login side image path (CSS):
+
+```css
+.hero-panel {
+  background-image: url('../assets/coffee_shop_pos_hero.jpg');
+}
+```
+
+---
+
+## 7. Key notes
+
+- JSON is hand-built in servlets (no Jackson/Gson).
+- No connection pool — each DAO opens/closes JDBC via `DBConnection`.
+- Operator avatar paths must be web-relative (e.g. `images/karan.jpg`), not Windows `C:\...` paths.
+- On screens ≤768px the login left panel is hidden by CSS (`display: none`).
+
+---
+
+## 8. File importance cheat-sheet
+
+| Area | Most important files |
+|------|----------------------|
+| Login UI + side image | `index.html`, `css/style.css`, `assets/coffee_shop_pos_hero.jpg`, `js/script.js` |
+| Auth / operators | `LoginServlet`, `OperatorServlet`, `UserDAO`, `user.java` |
+| POS / checkout | `dashboard.html`, `dashboard.js`, `OrderServlet`, `OrderDAO` |
+| DB | `DBConnection.java`, `db-migration-add-avatar.sql` |
+| Docs | `README.md` |
+
+---
+
+Made with ☕ — BrewOS POS v4.2  
+GitHub: https://github.com/karanRatiya123/coffee-shop-management-system
