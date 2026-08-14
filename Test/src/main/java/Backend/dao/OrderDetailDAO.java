@@ -78,6 +78,22 @@ public class OrderDetailDAO {
         return total;
     }
 
+    private void setSafeForeignKey(PreparedStatement ps, int paramIndex, int id, String parentTable, String idColumn, Connection con) throws Exception {
+        if (id > 0) {
+            String checkSql = "SELECT 1 FROM " + parentTable + " WHERE " + idColumn + " = ?";
+            try (PreparedStatement checkPs = con.prepareStatement(checkSql)) {
+                checkPs.setInt(1, id);
+                try (ResultSet rs = checkPs.executeQuery()) {
+                    if (rs.next()) {
+                        ps.setInt(paramIndex, id);
+                        return;
+                    }
+                }
+            }
+        }
+        ps.setNull(paramIndex, java.sql.Types.INTEGER);
+    }
+
     public boolean addOrderDetail(OrderDetail detail) {
         boolean status = false;
         try {
@@ -85,7 +101,7 @@ public class OrderDetailDAO {
             String sql = "INSERT INTO order_details(order_id, menu_id, quantity, unit_price, subtotal) VALUES(?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, detail.getOrderId());
-            ps.setInt(2, detail.getMenuId());
+            setSafeForeignKey(ps, 2, detail.getMenuId(), "menu_items", "menu_id", con);
             ps.setInt(3, detail.getQuantity());
             ps.setDouble(4, detail.getUnitPrice());
             ps.setDouble(5, detail.getSubtotal());

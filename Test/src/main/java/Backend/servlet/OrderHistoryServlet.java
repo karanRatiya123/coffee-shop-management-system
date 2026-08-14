@@ -5,7 +5,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import Backend.dao.OrderDAO;
+import Backend.dao.OrderDetailDAO;
 import Backend.model.Order;
+import Backend.model.OrderDetail;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -23,10 +25,12 @@ public class OrderHistoryServlet extends HttpServlet {
             throws ServletException, IOException {
 
         OrderDAO dao = new OrderDAO();
+        OrderDetailDAO detailDAO = new OrderDetailDAO();
 
         ArrayList<Order> history = dao.getCompletedOrders();
 
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         PrintWriter out = response.getWriter();
 
@@ -35,6 +39,7 @@ public class OrderHistoryServlet extends HttpServlet {
         for (int i = 0; i < history.size(); i++) {
 
             Order order = history.get(i);
+            ArrayList<OrderDetail> details = detailDAO.getOrderDetailsByOrderId(order.getOrderId());
 
             out.print("{");
             out.print("\"orderId\":" + order.getOrderId() + ",");
@@ -44,7 +49,21 @@ public class OrderHistoryServlet extends HttpServlet {
             out.print("\"subtotal\":" + order.getSubtotal() + ",");
             out.print("\"discount\":" + order.getDiscount() + ",");
             out.print("\"totalAmount\":" + order.getTotalAmount() + ",");
-            out.print("\"status\":\"" + order.getStatus() + "\"");
+            out.print("\"status\":\"" + order.getStatus() + "\",");
+            out.print("\"items\":[");
+            for (int j = 0; j < details.size(); j++) {
+                OrderDetail d = details.get(j);
+                out.print("{");
+                out.print("\"orderDetailId\":" + d.getOrderDetailId() + ",");
+                out.print("\"orderId\":" + d.getOrderId() + ",");
+                out.print("\"menuId\":" + d.getMenuId() + ",");
+                out.print("\"quantity\":" + d.getQuantity() + ",");
+                out.print("\"unitPrice\":" + d.getUnitPrice() + ",");
+                out.print("\"subtotal\":" + d.getSubtotal());
+                out.print("}");
+                if (j < details.size() - 1) out.print(",");
+            }
+            out.print("]");
             out.print("}");
 
             if (i < history.size() - 1) {

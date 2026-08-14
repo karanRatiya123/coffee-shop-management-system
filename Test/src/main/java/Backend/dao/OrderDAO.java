@@ -6,9 +6,26 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import Backend.model.Order;
+import Backend.model.OrderDetail;
 import Backend.util.DBConnection;
 
 public class OrderDAO {
+
+    private void setSafeForeignKey(PreparedStatement ps, int paramIndex, int id, String parentTable, String idColumn, Connection con) throws Exception {
+        if (id > 0) {
+            String checkSql = "SELECT 1 FROM " + parentTable + " WHERE " + idColumn + " = ?";
+            try (PreparedStatement checkPs = con.prepareStatement(checkSql)) {
+                checkPs.setInt(1, id);
+                try (ResultSet rs = checkPs.executeQuery()) {
+                    if (rs.next()) {
+                        ps.setInt(paramIndex, id);
+                        return;
+                    }
+                }
+            }
+        }
+        ps.setNull(paramIndex, java.sql.Types.INTEGER);
+    }
 
     // Show all orders
     public ArrayList<Order> getAllOrders() {
@@ -200,16 +217,29 @@ public ArrayList<Order> getCompletedOrders() {
     }
 
     public int addOrder(Order order) {
+        return addOrderWithDetails(order, null);
+    }
+
+    public int addOrderWithDetails(Order order, ArrayList<OrderDetail> details) {
         int generatedId = -1;
+        Connection con = null;
         try {
-            Connection con = DBConnection.getConnection();
+            con = DBConnection.getConnection();
             if (con != null) {
+                con.setAutoCommit(false);
+
                 String sql = "INSERT INTO orders(customer_id, employee_id, table_id, order_date, status, subtotal, discount, total_amount) VALUES(?, ?, ?, NOW(), ?, ?, ?, ?)";
                 PreparedStatement ps = con.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, order.getCustomerId() > 0 ? order.getCustomerId() : 1);
-                ps.setInt(2, order.getEmployeeId() > 0 ? order.getEmployeeId() : 1);
-                ps.setInt(3, order.getTableId() > 0 ? order.getTableId() : 1);
-                ps.setString(4, order.getStatus() != null ? order.getStatus() : "Completed");
+
+                setSafeForeignKey(ps, 1, order.getCustomerId(), "customers", "customer_id", con);
+                setSafeForeignKey(ps, 2, order.getEmployeeId(), "staff", "staff_id", con);
+                setSafeForeignKey(ps, 3, order.getTableId(), "cafe_tables", "table_id", con);
+
+                String status = order.getStatus();
+                if (status == null || status.trim().isEmpty() || status.equalsIgnoreCase("Paid")) {
+                    status = "Completed";
+                }
+                ps.setString(4, status);
                 ps.setDouble(5, order.getSubtotal());
                 ps.setDouble(6, order.getDiscount());
                 ps.setDouble(7, order.getTotalAmount());
@@ -223,10 +253,33 @@ public ArrayList<Order> getCompletedOrders() {
                     rs.close();
                 }
                 ps.close();
-                con.close();
+
+                if (generatedId > 0 && details != null && !details.isEmpty()) {
+                    String detailSql = "INSERT INTO order_details(order_id, menu_id, quantity, unit_price, subtotal) VALUES(?, ?, ?, ?, ?)";
+                    PreparedStatement detailPs = con.prepareStatement(detailSql);
+                    for (OrderDetail detail : details) {
+                        detailPs.setInt(1, generatedId);
+                        setSafeForeignKey(detailPs, 2, detail.getMenuId(), "menu_items", "menu_id", con);
+                        detailPs.setInt(3, detail.getQuantity());
+                        detailPs.setDouble(4, detail.getUnitPrice());
+                        detailPs.setDouble(5, detail.getSubtotal());
+                        detailPs.addBatch();
+                    }
+                    detailPs.executeBatch();
+                    detailPs.close();
+                }
+
+                con.commit();
             }
         } catch (Exception e) {
+            if (con != null) {
+                try { con.rollback(); } catch (Exception ex) {}
+            }
             e.printStackTrace();
+        } finally {
+            if (con != null) {
+                try { con.close(); } catch (Exception e) {}
+            }
         }
         return generatedId;
     }

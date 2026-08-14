@@ -714,18 +714,29 @@ async function saveOrderHistoryEntry(order) {
         history.unshift(order);
         localStorage.setItem('brewos_order_history', JSON.stringify(history));
 
-        const params = new URLSearchParams({
-            status: order.status || 'Paid',
-            subtotal: String(order.subtotal || 0),
-            discount: String(order.discount || 0),
-            totalAmount: String(order.total || 0)
-        });
+        const orderData = {
+            status: order.status || 'Completed',
+            subtotal: order.subtotal || 0,
+            discount: order.discount || 0,
+            totalAmount: order.total || 0,
+            customerId: order.customerId || 1,
+            employeeId: order.employeeId || 1,
+            tableId: order.tableId || 1,
+            items: (order.items || []).map(item => ({
+                menuId: item.id || item.menuId || 0,
+                quantity: item.quantity || 1,
+                unitPrice: item.price || 0,
+                subtotal: item.total || (item.price * item.quantity) || 0
+            }))
+        };
 
-        await fetch("OrderServlet", {
+        const res = await fetch("OrderServlet", {
             method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: params.toString()
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData)
         });
+        const result = await res.json();
+        console.log("Order persisted to database:", result);
         return order;
     } catch (e) {
         console.warn('Unable to save order history to database:', e);

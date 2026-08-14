@@ -17,20 +17,28 @@ function mapServletOrderToBill(order, index = 0) {
   const normalizedStatus = status === 'completed' || status === 'paid' ? 'Paid' : 'Held';
   const total = Number(order.totalAmount ?? order.total ?? 0);
 
+  const mappedItems = Array.isArray(order.items) ? order.items.map(item => ({
+    id: item.menuId || item.id,
+    name: item.name || `Item #${item.menuId || item.id}`,
+    quantity: item.quantity || 1,
+    price: Number(item.unitPrice || item.price || 0),
+    total: Number(item.subtotal || item.total || 0)
+  })) : [];
+
   return {
-    id: order.orderId || order.id || `ORD-${index + 1}`,
+    id: order.orderId ? `ORD-${order.orderId}` : (order.id || `ORD-${index + 1}`),
     status: normalizedStatus,
     operator: order.operator || sessionStorage.getItem('operatorName') || 'Unknown',
     createdAt,
     displayDateTime: formatDateTime(createdAt),
-    items: [],
-    subtotal: total,
-    discount: 0,
+    items: mappedItems,
+    subtotal: Number(order.subtotal ?? total),
+    discount: Number(order.discount ?? 0),
     tax: 0,
     total,
     payment: {
-      method: 'N/A',
-      summary: 'Servlet order'
+      method: 'Cash',
+      summary: 'Saved order'
     }
   };
 }
